@@ -10,7 +10,6 @@
       --bg:#08111f;
       --bg2:#0f172a;
       --card:#101a2e;
-      --card2:#15213a;
       --line:rgba(255,255,255,.08);
       --text:#eef6ff;
       --muted:#9fb2cc;
@@ -107,6 +106,7 @@
       color:white;
       font-weight:800;
       box-shadow:var(--shadow);
+      cursor:pointer;
     }
 
     .tab-btn.active{
@@ -283,6 +283,8 @@
       padding:10px 0 18px;
     }
 
+    .hidden{display:none!important}
+
     @media (max-width: 760px){
       .tabs{grid-template-columns:repeat(2,1fr)}
       .stats,.two-col,.three-col,.info-strip{grid-template-columns:1fr}
@@ -309,11 +311,11 @@
     </div>
 
     <div class="tabs">
-      <button class="tab-btn active" onclick="showTab('combat', this)">Combat</button>
-      <button class="tab-btn" onclick="showTab('openhand', this)">Open Hand</button>
-      <button class="tab-btn" onclick="showTab('enemies', this)">Enemies</button>
-      <button class="tab-btn" onclick="showTab('character', this)">Character</button>
-      <button class="tab-btn" onclick="showTab('log', this)">Log</button>
+      <button class="tab-btn active" data-tab="combat">Combat</button>
+      <button class="tab-btn" data-tab="openhand">Open Hand</button>
+      <button class="tab-btn" data-tab="enemies">Enemies</button>
+      <button class="tab-btn" data-tab="character">Character</button>
+      <button class="tab-btn" data-tab="log">Log</button>
     </div>
 
     <div id="combat" class="tab-panel active">
@@ -344,18 +346,18 @@
           </div>
 
           <div class="button-row" style="margin-top:10px">
-            <button class="danger" onclick="changeHP(-10)">-10</button>
-            <button class="danger" onclick="changeHP(-5)">-5</button>
-            <button class="danger" onclick="changeHP(-1)">-1</button>
-            <button class="success" onclick="changeHP(1)">+1</button>
-            <button class="success" onclick="changeHP(5)">+5</button>
-            <button class="success" onclick="changeHP(10)">+10</button>
+            <button class="danger" id="hpMinus10">-10</button>
+            <button class="danger" id="hpMinus5">-5</button>
+            <button class="danger" id="hpMinus1">-1</button>
+            <button class="success" id="hpPlus1">+1</button>
+            <button class="success" id="hpPlus5">+5</button>
+            <button class="success" id="hpPlus10">+10</button>
           </div>
 
           <div class="button-row" style="margin-top:10px">
-            <button class="warning" onclick="spendKi(1)">Spend 1 Ki</button>
-            <button class="success" onclick="restoreKi(1)">Restore 1 Ki</button>
-            <button class="ghost" onclick="restoreAllKi()">Restore All Ki</button>
+            <button class="warning" id="spendKiBtn">Spend 1 Ki</button>
+            <button class="success" id="restoreKiBtn">Restore 1 Ki</button>
+            <button class="ghost" id="restoreAllKiBtn">Restore All Ki</button>
           </div>
 
           <div class="result-box">
@@ -373,8 +375,8 @@
               <div class="attack-sub" id="quarterstaffText">Attack +5 • Damage 1d8+3</div>
             </div>
             <div class="button-row">
-              <button class="primary" onclick="rollAttack('Quarterstaff')">Attack</button>
-              <button class="success" onclick="rollDamage('Quarterstaff', 8)">Damage</button>
+              <button class="primary" id="quarterstaffAttackBtn">Attack</button>
+              <button class="success" id="quarterstaffDamageBtn">Damage</button>
             </div>
           </div>
 
@@ -384,8 +386,8 @@
               <div class="attack-sub" id="unarmedText">Attack +5 • Damage 1d4+3</div>
             </div>
             <div class="button-row">
-              <button class="primary" onclick="rollAttack('Unarmed Strike')">Attack</button>
-              <button class="success" onclick="rollDamage('Unarmed Strike', 4)">Damage</button>
+              <button class="primary" id="unarmedAttackBtn">Attack</button>
+              <button class="success" id="unarmedDamageBtn">Damage</button>
             </div>
           </div>
 
@@ -395,8 +397,8 @@
               <div class="attack-sub">Quarterstaff with advantage or disadvantage</div>
             </div>
             <div class="button-row">
-              <button class="primary" onclick="rollAttack('Quarterstaff', 'adv')">Adv</button>
-              <button class="warning" onclick="rollAttack('Quarterstaff', 'dis')">Dis</button>
+              <button class="primary" id="advBtn">Adv</button>
+              <button class="warning" id="disBtn">Dis</button>
             </div>
           </div>
 
@@ -406,7 +408,7 @@
               <div class="attack-sub">Spend 1 Ki • Roll 2 unarmed strikes</div>
             </div>
             <div class="button-row">
-              <button class="violet" onclick="flurryOfBlows()">Flurry</button>
+              <button class="violet" id="flurryBtn">Flurry</button>
             </div>
           </div>
 
@@ -419,16 +421,16 @@
         <div class="card">
           <h3>Turn Flow</h3>
           <div class="button-row">
-            <button id="actionBtn" class="ghost" onclick="toggleFlow('actionUsed', this)">Action</button>
-            <button id="bonusBtn" class="ghost" onclick="toggleFlow('bonusUsed', this)">Bonus Action</button>
-            <button id="reactionBtn" class="ghost" onclick="toggleFlow('reactionUsed', this)">Reaction</button>
-            <button id="felineBtn" class="ghost" onclick="toggleFlow('felineAgilityUsed', this)">Feline Agility</button>
+            <button id="actionBtn" class="ghost">Action</button>
+            <button id="bonusBtn" class="ghost">Bonus Action</button>
+            <button id="reactionBtn" class="ghost">Reaction</button>
+            <button id="felineBtn" class="ghost">Feline Agility</button>
           </div>
 
           <div class="button-row" style="margin-top:10px">
-            <button class="warning" onclick="shortRest()">Short Rest</button>
-            <button class="success" onclick="longRest()">Long Rest</button>
-            <button class="ghost" onclick="resetTurnFlow()">Reset Turn</button>
+            <button class="warning" id="shortRestBtn">Short Rest</button>
+            <button class="success" id="longRestBtn">Long Rest</button>
+            <button class="ghost" id="resetTurnBtn">Reset Turn</button>
           </div>
         </div>
       </div>
@@ -472,7 +474,7 @@
           </div>
 
           <div class="button-row" style="margin-top:10px">
-            <button class="primary" onclick="applyOpenHand()">Apply Open Hand Effect</button>
+            <button class="primary" id="applyOpenHandBtn">Apply Open Hand Effect</button>
           </div>
 
           <div class="result-box" id="openHandResult">
@@ -501,7 +503,7 @@
               <option>Tactical</option>
               <option>Fleeing</option>
             </select>
-            <button class="primary" onclick="addEnemy()">Add Enemy</button>
+            <button class="primary" id="addEnemyBtn">Add Enemy</button>
           </div>
         </div>
 
@@ -528,7 +530,7 @@
             <div><div class="label">XP</div><input id="xpInput" type="number" /></div>
           </div>
           <div class="button-row" style="margin-top:10px">
-            <button class="success" onclick="saveCharacterInputs()">Save Stats</button>
+            <button class="success" id="saveStatsBtn">Save Stats</button>
           </div>
         </div>
 
@@ -536,7 +538,7 @@
           <h3>Notes</h3>
           <textarea id="notesInput" placeholder="Campaign notes..."></textarea>
           <div class="button-row" style="margin-top:10px">
-            <button class="success" onclick="saveNotes()">Save Notes</button>
+            <button class="success" id="saveNotesBtn">Save Notes</button>
           </div>
         </div>
       </div>
@@ -547,7 +549,7 @@
         <div class="card">
           <h3>Combat Log</h3>
           <div class="button-row" style="margin-bottom:10px">
-            <button class="ghost" onclick="clearLog()">Clear Log</button>
+            <button class="ghost" id="clearLogBtn">Clear Log</button>
           </div>
           <div class="log-list" id="logList"></div>
         </div>
@@ -558,7 +560,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "indominuz-ui-upgrade-v1";
+    const STORAGE_KEY = "indominuz-ui-clickfix-v1";
 
     const defaultState = {
       character: {
@@ -596,19 +598,12 @@
       try{
         const saved = localStorage.getItem(STORAGE_KEY);
         if(saved) return JSON.parse(saved);
-      }catch(e){}
+      } catch(e) {}
       return JSON.parse(JSON.stringify(defaultState));
     }
 
     function saveState(){
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    }
-
-    function showTab(id, btn){
-      document.querySelectorAll(".tab-panel").forEach(el => el.classList.remove("active"));
-      document.querySelectorAll(".tab-btn").forEach(el => el.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
-      btn.classList.add("active");
     }
 
     function getMod(score){
@@ -653,6 +648,30 @@
       return 10 + getMod(state.character.dex) + getMod(state.character.wis);
     }
 
-    
-<!-- refresh -->
-    
+    function speed(){
+      let s = 30;
+      if(state.character.level >= 2) s += 10;
+      if(state.character.level >= 6) s += 5;
+      if(state.character.level >= 10) s += 5;
+      if(state.character.level >= 14) s += 5;
+      if(state.character.level >= 18) s += 5;
+      return s;
+    }
+
+    function kiMax(){
+      return state.character.level >= 2 ? state.character.level : 0;
+    }
+
+    function kiCurrent(){
+      return Math.max(0, kiMax() - state.character.kiSpent);
+    }
+
+    function d(sides){
+      return Math.floor(Math.random() * sides) + 1;
+    }
+
+    function addLog(text){
+      const time = new Date().toLocaleTimeString([], {hour:"numeric", minute:"2-digit"});
+      state.log.unshift(time + " • " + text);
+      state.log = state.log.slice(0, 120);
+      sav
