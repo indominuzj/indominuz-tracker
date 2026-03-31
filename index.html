@@ -1,18 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Indominuz</title>
 
 <style>
-body{font-family:Arial;background:#0f172a;color:white;margin:0;padding:10px}
+body{font-family:Arial;background:#0f172a;color:white;padding:10px}
 .card{background:#1e293b;padding:12px;border-radius:12px;margin-bottom:10px}
 button{padding:10px;border:none;border-radius:10px;margin:4px;font-weight:bold;background:#334155;color:white}
-.primary{background:#3b82f6}
 .success{background:#22c55e}
 .danger{background:#ef4444}
-.warning{background:#f59e0b}
 </style>
 </head>
 
@@ -20,18 +17,16 @@ button{padding:10px;border:none;border-radius:10px;margin:4px;font-weight:bold;b
 
 <div class="card">
 <h2>Indominuz</h2>
-<div id="hpText"></div>
-<div id="kiText"></div>
+<div id="hp"></div>
+<div id="ki"></div>
 </div>
 
 <div class="card">
-<h3>HP</h3>
-<button onclick="changeHP(-5)" class="danger">-5</button>
-<button onclick="changeHP(5)" class="success">+5</button>
+<button onclick="hpChange(-5)" class="danger">-5 HP</button>
+<button onclick="hpChange(5)" class="success">+5 HP</button>
 </div>
 
 <div class="card">
-<h3>Combat</h3>
 <button onclick="attack()">Attack</button>
 <button onclick="flurry()">Flurry</button>
 </div>
@@ -39,89 +34,62 @@ button{padding:10px;border:none;border-radius:10px;margin:4px;font-weight:bold;b
 <div class="card" id="log"></div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function(){
-
-const STORAGE_KEY = "indominuz_v2";
-
-const defaultState = {
-  hp: 26,
-  level: 3,
-  dex: 16,
-  wis: 15,
-  con: 14,
-  ki: 3,
-  log:[]
-};
-
-function load(){
-  try{
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if(!saved) return {...defaultState};
-    return {...defaultState,...saved};
-  }catch{
-    return {...defaultState};
-  }
-}
-
-let state = load();
-
-function save(){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
+let hp = 26;
+let level = 3;
+let dex = 16;
+let con = 14;
+let ki = 3;
+let logs = [];
 
 function mod(x){ return Math.floor((x-10)/2); }
 
 function maxHp(){
-  return 8 + mod(state.con) + ((state.level-1)*(5+mod(state.con)));
+  return 8 + mod(con) + ((level-1)*(5+mod(con)));
 }
 
 function attackBonus(){
-  return mod(state.dex)+2;
+  return mod(dex)+2;
 }
 
-function changeHP(n){
-  state.hp += n;
-  if(state.hp<0) state.hp=0;
-  if(state.hp>maxHp()) state.hp=maxHp();
-  log("HP "+(n>0?"+":"")+n);
-  save(); render();
+function hpChange(n){
+  hp += n;
+  if(hp<0) hp=0;
+  if(hp>maxHp()) hp=maxHp();
+  log("HP "+n);
+  render();
 }
 
 function attack(){
-  const roll = Math.floor(Math.random()*20)+1;
-  const total = roll + attackBonus();
-  log("Attack roll: "+total);
+  let roll = Math.floor(Math.random()*20)+1;
+  let total = roll + attackBonus();
+  log("Attack: "+total);
+  render();
 }
 
 function flurry(){
-  if(state.ki<=0){ log("No Ki"); return;}
-  state.ki--;
-  const dmg = Math.floor(Math.random()*4)+1 + mod(state.dex);
-  log("Flurry damage: "+dmg);
-  save(); render();
+  if(ki<=0){
+    log("No Ki");
+    render();
+    return;
+  }
+  ki--;
+  let dmg = Math.floor(Math.random()*4)+1 + mod(dex);
+  log("Flurry dmg: "+dmg);
+  render();
 }
 
 function log(text){
-  state.log.unshift(text);
-  state.log = state.log.slice(0,20);
+  logs.unshift(text);
+  logs = logs.slice(0,10);
 }
 
 function render(){
-  document.getElementById("hpText").textContent =
-    "HP: " + state.hp + "/" + maxHp();
-
-  document.getElementById("kiText").textContent =
-    "Ki: " + state.ki;
-
-  document.getElementById("log").innerHTML =
-    state.log.map(x => "<div>" + x + "</div>").join("");
-
-  save();
+  document.getElementById("hp").textContent = "HP: "+hp+"/"+maxHp();
+  document.getElementById("ki").textContent = "Ki: "+ki;
+  document.getElementById("log").innerHTML = logs.map(x=>"<div>"+x+"</div>").join("");
 }
 
 render();
-
-});
 </script>
 
 </body>
