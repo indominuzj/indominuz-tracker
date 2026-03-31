@@ -1,693 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Indominuz - Combat App</title>
-  <meta name="theme-color" content="#08111f" />
-  <style>
-    :root{
-      --bg:#08111f;
-      --bg2:#0f172a;
-      --panel:#111c31;
-      --panel2:#16223b;
-      --card:#1b2944;
-      --line:rgba(255,255,255,.08);
-      --text:#eef6ff;
-      --muted:#94a8c7;
-      --blue:#3b82f6;
-      --cyan:#22d3ee;
-      --green:#22c55e;
-      --amber:#f59e0b;
-      --red:#ef4444;
-      --violet:#8b5cf6;
-      --shadow:0 18px 45px rgba(0,0,0,.35);
-      --radius:20px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indominuz</title>
 
-    * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; }
-    body{
-      font-family: Arial, Helvetica, sans-serif;
-      background:
-        radial-gradient(circle at top, rgba(34,211,238,.12), transparent 25%),
-        radial-gradient(circle at top right, rgba(59,130,246,.12), transparent 25%),
-        linear-gradient(180deg, var(--bg), var(--bg2));
-      color: var(--text);
-      min-height: 100vh;
-      padding: 14px;
-    }
-
-    .app {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .hero {
-      background:
-        linear-gradient(135deg, rgba(59,130,246,.20), rgba(34,211,238,.08)),
-        linear-gradient(180deg, rgba(17,28,49,.96), rgba(8,17,31,.96));
-      border: 1px solid var(--line);
-      border-radius: 26px;
-      padding: 18px;
-      box-shadow: var(--shadow);
-      margin-bottom: 14px;
-    }
-
-    .hero-top{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-
-    .title{
-      margin:0;
-      font-size:2rem;
-      font-weight:900;
-      letter-spacing:.3px;
-    }
-
-    .subtitle{
-      margin-top:4px;
-      color:var(--muted);
-      font-size:.95rem;
-    }
-
-    .chips{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-
-    .chip{
-      padding:8px 12px;
-      border-radius:999px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.08);
-      color:#dbeafe;
-      font-size:.82rem;
-      font-weight:700;
-    }
-
-    .tabs{
-      display:grid;
-      grid-template-columns:repeat(6,1fr);
-      gap:8px;
-      margin-bottom:14px;
-    }
-
-    .tab-btn{
-      border:none;
-      border-radius:16px;
-      padding:12px 10px;
-      background:#22324f;
-      color:white;
-      font-weight:800;
-      cursor:pointer;
-      box-shadow:var(--shadow);
-    }
-
-    .tab-btn.active{
-      background:linear-gradient(135deg, var(--blue), var(--cyan));
-    }
-
-    .tab-panel{ display:none; }
-    .tab-panel.active{ display:block; }
-
-    .grid{
-      display:grid;
-      gap:12px;
-    }
-
-    .two{
-      display:grid;
-      gap:12px;
-      grid-template-columns:1.1fr .9fr;
-    }
-
-    .three{
-      display:grid;
-      gap:12px;
-      grid-template-columns:repeat(3,1fr);
-    }
-
-    .four{
-      display:grid;
-      gap:10px;
-      grid-template-columns:repeat(4,1fr);
-    }
-
-    .card{
-      background:linear-gradient(180deg, rgba(17,28,49,.96), rgba(11,20,36,.96));
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      padding:14px;
-      box-shadow:var(--shadow);
-    }
-
-    .card h3{
-      margin:0 0 12px 0;
-      font-size:1.02rem;
-    }
-
-    .stat{
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.06);
-      border-radius:16px;
-      padding:12px;
-    }
-
-    .label{
-      color:var(--muted);
-      font-size:.8rem;
-      margin-bottom:4px;
-    }
-
-    .value{
-      font-size:1.35rem;
-      font-weight:900;
-    }
-
-    .small{
-      font-size:.88rem;
-      color:var(--muted);
-      line-height:1.35;
-    }
-
-    .button-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-    }
-
-    button, input, select, textarea{
-      border:none;
-      outline:none;
-      border-radius:14px;
-      padding:11px 13px;
-      font-size:.96rem;
-      box-shadow:var(--shadow);
-    }
-
-    button{
-      cursor:pointer;
-      color:white;
-      background:#334155;
-      font-weight:800;
-    }
-
-    button:active{ transform:scale(.98); }
-    .primary{ background:linear-gradient(135deg, var(--blue), #2563eb); }
-    .success{ background:linear-gradient(135deg, #16a34a, var(--green)); }
-    .warning{ background:linear-gradient(135deg, #d97706, var(--amber)); }
-    .danger{ background:linear-gradient(135deg, #dc2626, var(--red)); }
-    .violet{ background:linear-gradient(135deg, #7c3aed, var(--violet)); }
-    .ghost{ background:#334155; }
-
-    input, select, textarea{
-      width:100%;
-      color:white;
-      background:rgba(255,255,255,.07);
-      border:1px solid rgba(255,255,255,.06);
-      font-weight:500;
-    }
-
-    textarea{
-      min-height:120px;
-      resize:vertical;
-    }
-
-    .stack{ display:grid; gap:10px; }
-    .result{
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.06);
-      border-radius:16px;
-      padding:12px;
-    }
-
-    .result-big{
-      font-size:1.15rem;
-      font-weight:900;
-      margin-bottom:4px;
-    }
-
-    .resource-pips{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-    }
-
-    .pip{
-      min-width:64px;
-      text-align:center;
-    }
-
-    .pip.used{
-      background:linear-gradient(135deg, #b45309, #f59e0b);
-    }
-
-    .ability-grid{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:10px;
-    }
-
-    .ability{
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.06);
-      border-radius:16px;
-      padding:10px;
-    }
-
-    .ability-top{
-      display:flex;
-      justify-content:space-between;
-      gap:8px;
-      margin-bottom:6px;
-    }
-
-    .enemy-list{
-      display:grid;
-      gap:10px;
-    }
-
-    .enemy{
-      border:2px solid transparent;
-      background:rgba(255,255,255,.04);
-      border-radius:16px;
-      padding:12px;
-    }
-
-    .enemy.active{
-      border-color:var(--blue);
-      box-shadow:0 0 0 2px rgba(59,130,246,.20);
-    }
-
-    .enemy.turn{
-      outline:2px solid #facc15;
-    }
-
-    .enemy-top{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .enemy-name{
-      font-weight:900;
-    }
-
-    .enemy-sub{
-      color:var(--muted);
-      font-size:.85rem;
-      margin-top:3px;
-    }
-
-    .hp-track{
-      width:100%;
-      height:10px;
-      background:rgba(255,255,255,.08);
-      border-radius:999px;
-      overflow:hidden;
-      margin-top:8px;
-    }
-
-    .hp-fill{
-      height:100%;
-      background:linear-gradient(90deg, #ef4444, #f59e0b, #22c55e);
-      width:50%;
-    }
-
-    .pill{
-      display:inline-block;
-      margin:6px 6px 0 0;
-      padding:6px 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.08);
-      font-size:.8rem;
-      color:#dbeafe;
-    }
-
-    .log-list{
-      display:grid;
-      gap:8px;
-      max-height:420px;
-      overflow:auto;
-    }
-
-    .log-entry{
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.06);
-      border-radius:14px;
-      padding:10px;
-      color:#dbeafe;
-      font-size:.9rem;
-    }
-
-    .footer{
-      text-align:center;
-      color:var(--muted);
-      font-size:.84rem;
-      padding:8px 0 18px;
-    }
-
-    @media (max-width: 880px){
-      .tabs{ grid-template-columns:repeat(3,1fr); }
-      .two, .three, .four, .ability-grid{ grid-template-columns:1fr; }
-    }
-
-    @media (max-width: 520px){
-      .tabs{ grid-template-columns:repeat(2,1fr); }
-      .title{ font-size:1.65rem; }
-      button{ width:100%; }
-    }
-  </style>
+<style>
+body{font-family:Arial;background:#0f172a;color:white;margin:0;padding:10px}
+.card{background:#1e293b;padding:12px;border-radius:12px;margin-bottom:10px}
+button{padding:10px;border:none;border-radius:10px;margin:4px;font-weight:bold;background:#334155;color:white}
+.primary{background:#3b82f6}
+.success{background:#22c55e}
+.danger{background:#ef4444}
+.warning{background:#f59e0b}
+</style>
 </head>
+
 <body>
-<div class="app">
-  <div class="hero">
-    <div class="hero-top">
-      <div>
-        <h1 class="title">🐾 Indominuz</h1>
-        <div class="subtitle">Tabaxi Monk • Way of the Open Hand • Mobile Combat Companion</div>
-      </div>
-      <div class="chips">
-        <div class="chip">Auto Save</div>
-        <div class="chip">Combat Engine</div>
-        <div class="chip">Monk Tools</div>
-      </div>
-    </div>
-  </div>
 
-  <div class="tabs">
-    <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
-    <button class="tab-btn" data-tab="combat">Combat</button>
-    <button class="tab-btn" data-tab="enemies">Enemies</button>
-    <button class="tab-btn" data-tab="character">Character</button>
-    <button class="tab-btn" data-tab="inventory">Inventory</button>
-    <button class="tab-btn" data-tab="log">Log</button>
-  </div>
-
-  <div id="dashboard" class="tab-panel active">
-    <div class="grid">
-      <div class="card">
-        <h3>Core Overview</h3>
-        <div class="four">
-          <div class="stat"><div class="label">Level</div><div class="value" id="levelDisplay">3</div></div>
-          <div class="stat"><div class="label">HP</div><div class="value" id="hpDisplay">26/26</div></div>
-          <div class="stat"><div class="label">Ki</div><div class="value" id="kiDisplay">3/3</div></div>
-          <div class="stat"><div class="label">AC</div><div class="value" id="acDisplay">15</div></div>
-          <div class="stat"><div class="label">Speed</div><div class="value" id="speedDisplay">40 ft</div></div>
-          <div class="stat"><div class="label">Save DC</div><div class="value" id="saveDcDisplay">12</div></div>
-          <div class="stat"><div class="label">Gold</div><div class="value" id="goldDisplay">50</div></div>
-          <div class="stat"><div class="label">XP</div><div class="value" id="xpDisplay">900</div></div>
-        </div>
-      </div>
-
-      <div class="two">
-        <div class="card">
-          <h3>Quick Actions</h3>
-          <div class="button-row">
-            <button class="danger" data-hp="-10">-10 HP</button>
-            <button class="danger" data-hp="-5">-5 HP</button>
-            <button class="danger" data-hp="-1">-1 HP</button>
-            <button class="success" data-hp="1">+1 HP</button>
-            <button class="success" data-hp="5">+5 HP</button>
-            <button class="success" data-hp="10">+10 HP</button>
-          </div>
-          <div class="button-row" style="margin-top:10px">
-            <button class="warning" id="shortRestBtn">Short Rest</button>
-            <button class="success" id="longRestBtn">Long Rest</button>
-            <button class="ghost" id="resetTurnBtn">Reset Turn</button>
-          </div>
-          <div class="result" style="margin-top:10px">
-            <div class="result-big" id="statusText">Ready for action</div>
-            <div class="small">Use short rest to restore Ki. Long rest restores HP and Ki.</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Turn Flow</h3>
-          <div class="button-row">
-            <button id="actionBtn" class="ghost">Action</button>
-            <button id="bonusBtn" class="ghost">Bonus</button>
-            <button id="reactionBtn" class="ghost">Reaction</button>
-            <button id="felineBtn" class="ghost">Feline Agility</button>
-          </div>
-          <div class="result" style="margin-top:10px">
-            <div class="result-big">Round <span id="roundDisplay">1</span></div>
-            <div class="small">Current turn: <span id="currentTurnDisplay">—</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="combat" class="tab-panel">
-    <div class="two">
-      <div class="card">
-        <h3>Attack Engine</h3>
-
-        <div class="stack">
-          <div>
-            <div class="label">Selected Target</div>
-            <select id="targetSelect"></select>
-          </div>
-
-          <div class="button-row">
-            <button class="primary" id="quarterstaffAtkBtn">Quarterstaff Attack</button>
-            <button class="success" id="quarterstaffDmgBtn">Quarterstaff Damage</button>
-          </div>
-
-          <div class="button-row">
-            <button class="primary" id="unarmedAtkBtn">Unarmed Attack</button>
-            <button class="success" id="unarmedDmgBtn">Unarmed Damage</button>
-          </div>
-
-          <div class="button-row">
-            <button class="primary" id="advBtn">Attack w/ Advantage</button>
-            <button class="warning" id="disBtn">Attack w/ Disadvantage</button>
-          </div>
-
-          <div class="button-row">
-            <button class="violet" id="flurryBtn">Flurry of Blows</button>
-            <button class="warning" id="openHandBtn">Open Hand Effect</button>
-          </div>
-        </div>
-
-        <div class="result" style="margin-top:12px" id="combatResult">
-          <div class="result-big">Ready to fight</div>
-          <div class="small">Select a target and roll attacks.</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Monk Resources</h3>
-        <div class="label">Ki Points</div>
-        <div class="resource-pips" id="kiPips"></div>
-
-        <div class="stack" style="margin-top:12px">
-          <div>
-            <div class="label">Open Hand Effect</div>
-            <select id="openHandEffect">
-              <option value="Knock Prone">Knock Prone</option>
-              <option value="Push 15 ft">Push 15 ft</option>
-              <option value="No Reactions">No Reactions</option>
-            </select>
-          </div>
-          <div class="small">Open Hand effects apply to the selected target and show on the enemy card.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="enemies" class="tab-panel">
-    <div class="two">
-      <div class="card">
-        <h3>Add Enemy</h3>
-        <div class="stack">
-          <input id="enemyNameInput" placeholder="Enemy name" />
-          <div class="two">
-            <input id="enemyHpInput" type="number" placeholder="HP" />
-            <input id="enemyAcInput" type="number" placeholder="AC" />
-          </div>
-          <div class="two">
-            <input id="enemyInitInput" type="number" placeholder="Initiative" />
-            <select id="enemyConditionInput">
-              <option value="">Condition</option>
-              <option>None</option>
-              <option>Prone</option>
-              <option>Stunned</option>
-              <option>Restrained</option>
-              <option>Grappled</option>
-              <option>Poisoned</option>
-            </select>
-          </div>
-          <div class="button-row">
-            <button class="primary" id="addEnemyBtn">Add Enemy</button>
-            <button class="danger" id="clearEnemiesBtn">Clear All</button>
-            <button class="warning" id="nextTurnBtn">Next Turn</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Initiative Order</h3>
-        <div class="small">Enemies are sorted by initiative. Active turn is highlighted.</div>
-        <div class="enemy-list" id="enemyList"></div>
-      </div>
-    </div>
-  </div>
-
-  <div id="character" class="tab-panel">
-    <div class="two">
-      <div class="card">
-        <h3>Character Builder</h3>
-        <div class="stack">
-          <div class="two">
-            <input id="levelInput" type="number" min="1" max="20" placeholder="Level" />
-            <input id="goldInput" type="number" placeholder="Gold" />
-          </div>
-          <div class="two">
-            <input id="xpInput" type="number" placeholder="XP" />
-            <input id="rawHpInput" type="number" placeholder="Current HP" />
-          </div>
-          <div class="ability-grid">
-            <div class="ability">
-              <div class="ability-top"><strong>STR</strong><span id="strModDisplay">+0</span></div>
-              <input id="strInput" type="number" />
-            </div>
-            <div class="ability">
-              <div class="ability-top"><strong>DEX</strong><span id="dexModDisplay">+3</span></div>
-              <input id="dexInput" type="number" />
-            </div>
-            <div class="ability">
-              <div class="ability-top"><strong>CON</strong><span id="conModDisplay">+2</span></div>
-              <input id="conInput" type="number" />
-            </div>
-            <div class="ability">
-              <div class="ability-top"><strong>INT</strong><span id="intModDisplay">-1</span></div>
-              <input id="intInput" type="number" />
-            </div>
-            <div class="ability">
-              <div class="ability-top"><strong>WIS</strong><span id="wisModDisplay">+2</span></div>
-              <input id="wisInput" type="number" />
-            </div>
-            <div class="ability">
-              <div class="ability-top"><strong>CHA</strong><span id="chaModDisplay">+0</span></div>
-              <input id="chaInput" type="number" />
-            </div>
-          </div>
-          <div class="button-row">
-            <button class="success" id="saveCharacterBtn">Save Character</button>
-            <button class="warning" id="levelUpBtn">Level Up</button>
-            <button class="danger" id="resetCharacterBtn">Reset Build</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Derived Stats</h3>
-        <div class="three">
-          <div class="stat"><div class="label">Attack Bonus</div><div class="value" id="attackBonusDisplay">+5</div></div>
-          <div class="stat"><div class="label">Damage Mod</div><div class="value" id="damageModDisplay">+3</div></div>
-          <div class="stat"><div class="label">Prof Bonus</div><div class="value" id="profDisplay">+2</div></div>
-        </div>
-        <div class="result" style="margin-top:12px">
-          <div class="result-big">Character synced</div>
-          <div class="small">Changing stats updates AC, speed, HP, Ki, and save DC automatically.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="inventory" class="tab-panel">
-    <div class="two">
-      <div class="card">
-        <h3>Inventory</h3>
-        <div class="stack">
-          <div class="two">
-            <input id="itemNameInput" placeholder="Item name" />
-            <input id="itemQtyInput" type="number" placeholder="Qty" />
-          </div>
-          <div class="button-row">
-            <button class="primary" id="addItemBtn">Add Item</button>
-            <button class="danger" id="clearItemsBtn">Clear Inventory</button>
-          </div>
-        </div>
-        <div class="enemy-list" id="inventoryList" style="margin-top:12px"></div>
-      </div>
-
-      <div class="card">
-        <h3>Notes</h3>
-        <textarea id="notesInput" placeholder="Campaign notes, reminders, clues..."></textarea>
-        <div class="button-row" style="margin-top:10px">
-          <button class="success" id="saveNotesBtn">Save Notes</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="log" class="tab-panel">
-    <div class="card">
-      <h3>Combat Log</h3>
-      <div class="button-row" style="margin-bottom:10px">
-        <button class="danger" id="clearLogBtn">Clear Log</button>
-      </div>
-      <div class="log-list" id="logList"></div>
-    </div>
-  </div>
-
-  <div class="footer">Indominuz app • serious mode enabled</div>
+<div class="card">
+<h2>Indominuz</h2>
+<div id="hpText"></div>
+<div id="kiText"></div>
 </div>
 
+<div class="card">
+<h3>HP</h3>
+<button onclick="changeHP(-5)" class="danger">-5</button>
+<button onclick="changeHP(5)" class="success">+5</button>
+</div>
+
+<div class="card">
+<h3>Combat</h3>
+<button onclick="attack()">Attack</button>
+<button onclick="flurry()">Flurry</button>
+</div>
+
+<div class="card" id="log"></div>
+
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const STORAGE_KEY = "indominuz-serious-app-v2";
+document.addEventListener("DOMContentLoaded", function(){
 
-  const defaultState = {
-    character: {
-      level: 3,
-      str: 10,
-      dex: 16,
-      con: 14,
-      intStat: 8,
-      wis: 15,
-      cha: 10,
-      rawHp: 26,
-      gold: 50,
-      xp: 900,
-      kiSpent: 0,
-      actionUsed: false,
-      bonusUsed: false,
-      reactionUsed: false,
-      felineAgilityUsed: false,
-      notes: ""
-    },
-    enemies: [],
-    inventory: [],
-    log: ["Indominuz enters combat."],
-    round: 1,
-    currentTurnIndex: 0,
-    targetId: null,
-    openHandEffect: "Knock Prone"
-  };
+const STORAGE_KEY = "indominuz_v2";
 
-  function loadState(){
-    try{
-      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
-      if(!saved) return JSON.parse(JSON.stringify(defaultState));
+const defaultState = {
+  hp: 26,
+  level: 3,
+  dex: 16,
+  wis: 15,
+  con: 14,
+  ki: 3,
+  log:[]
+};
 
-      return {
-        ...defaultState,
-        ...saved,
-        character: {
-          ...defaultState.character,
-          ...(saved.character || {})
-        },
-        enemies: Array.isArray(saved.enemies) ? saved.enemies : [],
-        inventory: Array.isArray(saved.inventory) ? saved.i
+function load(){
+  try{
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if(!saved) return {...defaultState};
+    return {...defaultState,...saved};
+  }catch{
+    return {...defaultState};
+  }
+}
+
+let state = load();
+
+function save(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function mod(x){ return Math.floor((x-10)/2); }
+
+function maxHp(){
+  return 8 + mod(state.con) + ((state.level-1)*(5+mod(state.con)));
+}
+
+function attackBonus(){
+  return mod(state.dex)+2;
+}
+
+function changeHP(n){
+  state.hp += n;
+  if(state.hp<0) state.hp=0;
+  if(state.hp>maxHp()) state.hp=maxHp();
+  log("HP "+(n>0?"+":"")+n);
+  save(); render();
+}
+
+function attack(){
+  const roll = Math.floor(Math.random()*20)+1;
+  const total = roll + attackBonus();
+  log("Attack roll: "+total);
+}
+
+function flurry(){
+  if(state.ki<=0){ log("No Ki"); return;}
+  state.ki--;
+  const dmg = Math.floor(Math.random()*4)+1 + mod(state.dex);
+  log("Flurry damage: "+dmg);
+  save(); render();
+}
+
+function log(text){
+  state.log.unshift(text);
+  state.log = state.log.slice(0,20);
+}
+
+function render(){
+  document.getElementById("hpText").textContent =
+    "HP: "+state.hp+"/"+maxHp();
+  document.getElementById("kiText").textContent =
+    "Ki: "+state.ki;
+
+  document.getElementById("log").innerHTML =
+    state.log.map(x=>"<div>"+x+"</div>").join("");
+
+  save();
+}
+
+render();
+
+});
+</script>
+
+</body>
+</html>
