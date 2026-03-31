@@ -108,12 +108,13 @@ function log(text){
 
 function render(){
   document.getElementById("hpText").textContent =
-    "HP: "+state.hp+"/"+maxHp();
+    "HP: " + state.hp + "/" + maxHp();
+
   document.getElementById("kiText").textContent =
-    "Ki: "+state.ki;
+    "Ki: " + state.ki;
 
   document.getElementById("log").innerHTML =
-    state.log.map(x=>"<div>"+x+"</div>").join("");
+    state.log.map(x => "<div>" + x + "</div>").join("");
 
   save();
 }
