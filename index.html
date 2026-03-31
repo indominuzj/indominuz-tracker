@@ -4,172 +4,93 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Indominuz</title>
-  <meta name="theme-color" content="#0f172a" />
+  <meta name="theme-color" content="#08111f" />
   <style>
     :root{
-      --bg1:#020617;
+      --bg:#08111f;
       --bg2:#0f172a;
-      --card:#111827;
-      --card2:#1e293b;
+      --card:#101a2e;
+      --card2:#15213a;
       --line:rgba(255,255,255,.08);
-      --text:#f8fafc;
-      --muted:#94a3b8;
+      --text:#eef6ff;
+      --muted:#9fb2cc;
       --blue:#38bdf8;
       --blue2:#2563eb;
+      --cyan:#22d3ee;
       --green:#22c55e;
       --amber:#f59e0b;
       --red:#ef4444;
       --violet:#8b5cf6;
-      --shadow:0 18px 40px rgba(0,0,0,.35);
-      --radius:20px;
+      --shadow:0 14px 35px rgba(0,0,0,.35);
+      --radius:22px;
     }
 
     *{box-sizing:border-box}
     html,body{margin:0;padding:0}
     body{
+      min-height:100vh;
       font-family:Arial, Helvetica, sans-serif;
       color:var(--text);
-      min-height:100vh;
       background:
-        radial-gradient(circle at top, rgba(56,189,248,.18), transparent 28%),
-        linear-gradient(180deg,var(--bg1),var(--bg2));
+        radial-gradient(circle at top, rgba(56,189,248,.18), transparent 25%),
+        radial-gradient(circle at top right, rgba(139,92,246,.12), transparent 20%),
+        linear-gradient(180deg,var(--bg),var(--bg2));
       padding:14px;
     }
 
-    .wrap{max-width:900px;margin:0 auto}
+    .wrap{max-width:980px;margin:0 auto}
     .hero,.card{
       border:1px solid var(--line);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
-      background:linear-gradient(180deg, rgba(17,24,39,.96), rgba(15,23,42,.96));
     }
 
     .hero{
       padding:18px;
       margin-bottom:14px;
       background:
-        radial-gradient(circle at top right, rgba(56,189,248,.18), transparent 25%),
-        linear-gradient(135deg, rgba(37,99,235,.16), rgba(139,92,246,.12));
+        linear-gradient(135deg, rgba(37,99,235,.20), rgba(34,211,238,.10)),
+        linear-gradient(180deg, rgba(16,26,46,.98), rgba(8,17,31,.98));
     }
 
-    .title{font-size:2rem;font-weight:800;margin:0}
-    .subtitle{margin-top:4px;color:var(--muted)}
-    .grid{display:grid;gap:12px}
-    .card{padding:14px}
-    .card h3{margin:0 0 12px 0;font-size:1.05rem}
-
-    .stats{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:10px;
-    }
-
-    .stat{
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.05);
-      border-radius:16px;
-      padding:10px;
-    }
-
-    .label{font-size:.8rem;color:var(--muted);margin-bottom:4px}
-    .value{font-size:1.35rem;font-weight:800}
-
-    .button-row{display:flex;flex-wrap:wrap;gap:8px}
-    .stack > *{width:100%}
-    button, input, select, textarea{
-      border:none;
-      border-radius:14px;
-      padding:11px 13px;
-      font-size:.98rem;
-      box-shadow:var(--shadow);
-      outline:none;
-    }
-
-    button{
-      cursor:pointer;
-      color:white;
-      font-weight:700;
-      background:#334155;
-      transition:.15s ease;
-    }
-
-    button:active{transform:scale(.98)}
-    .primary{background:linear-gradient(135deg,var(--blue2),var(--blue))}
-    .success{background:linear-gradient(135deg,#16a34a,var(--green))}
-    .warning{background:linear-gradient(135deg,#d97706,var(--amber))}
-    .danger{background:linear-gradient(135deg,#dc2626,var(--red))}
-    .violet{background:linear-gradient(135deg,#7c3aed,var(--violet))}
-    .ghost{background:#334155}
-
-    input, select, textarea{
-      width:100%;
-      background:rgba(255,255,255,.08);
-      color:white;
-    }
-
-    textarea{min-height:100px;resize:vertical}
-    input::placeholder, textarea::placeholder{color:#cbd5e1}
-
-    .section-grid{
-      display:grid;
-      gap:12px;
-      grid-template-columns:1fr;
-    }
-
-    .result-box{
-      margin-top:10px;
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.06);
-      border-radius:16px;
-      padding:12px;
-    }
-
-    .result-big{font-size:1.2rem;font-weight:800;margin-bottom:4px}
-    .result-small{font-size:.93rem;color:var(--muted);line-height:1.4}
-
-    .attack{
+    .title-row{
       display:flex;
       justify-content:space-between;
       align-items:center;
       gap:10px;
-      padding:10px 0;
-      border-bottom:1px solid rgba(255,255,255,.06);
+      flex-wrap:wrap;
     }
 
-    .attack:last-child{border-bottom:none}
-    .attack-name{font-weight:800}
-    .attack-sub{font-size:.86rem;color:var(--muted);margin-top:3px}
-
-    .enemy-list,.log-list{display:grid;gap:10px}
-    .enemy-card,.log-entry{
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.06);
-      border-radius:16px;
-      padding:12px;
+    .title{
+      font-size:2rem;
+      font-weight:900;
+      margin:0;
+      letter-spacing:.3px;
     }
 
-    .enemy-top{
+    .subtitle{
+      margin-top:6px;
+      color:var(--muted);
+      font-size:.95rem;
+    }
+
+    .top-badges{
       display:flex;
-      justify-content:space-between;
-      gap:10px;
-      align-items:center;
-      margin-bottom:8px;
+      gap:8px;
+      flex-wrap:wrap;
     }
 
-    .pill{
-      display:inline-block;
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:8px 12px;
       border-radius:999px;
-      padding:6px 10px;
-      font-size:.8rem;
-      margin:4px 6px 0 0;
-      background:rgba(255,255,255,.08);
-      color:#e5e7eb;
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.08);
+      font-size:.84rem;
+      color:#d9ecff;
     }
-
-    .healthy{background:rgba(34,197,94,.15);color:#86efac}
-    .bloodied{background:rgba(245,158,11,.15);color:#fcd34d}
-    .critical{background:rgba(239,68,68,.15);color:#fca5a5}
-    .defeated{background:rgba(127,29,29,.25);color:#fecaca}
 
     .tabs{
       display:grid;
@@ -178,25 +99,180 @@
       margin-bottom:12px;
     }
 
-    .tab-btn.active{background:linear-gradient(135deg,var(--blue2),var(--blue))}
+    .tab-btn{
+      border:none;
+      border-radius:16px;
+      padding:12px 10px;
+      background:#24324e;
+      color:white;
+      font-weight:800;
+      box-shadow:var(--shadow);
+    }
+
+    .tab-btn.active{
+      background:linear-gradient(135deg,var(--blue2),var(--cyan));
+    }
+
     .tab-panel{display:none}
     .tab-panel.active{display:block}
 
-    .two-col{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
+    .grid{display:grid;gap:12px}
+    .card{
+      padding:14px;
+      background:linear-gradient(180deg, rgba(16,26,46,.97), rgba(10,18,34,.97));
     }
 
-    .three-col{
+    .card h3{
+      margin:0 0 12px 0;
+      font-size:1.06rem;
+    }
+
+    .stats{
       display:grid;
       grid-template-columns:repeat(3,1fr);
       gap:10px;
     }
 
+    .stat{
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:18px;
+      padding:12px;
+    }
+
+    .label{
+      color:var(--muted);
+      font-size:.82rem;
+      margin-bottom:5px;
+    }
+
+    .value{
+      font-size:1.38rem;
+      font-weight:900;
+    }
+
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+
+    button, input, select, textarea{
+      border:none;
+      border-radius:14px;
+      padding:12px 13px;
+      font-size:.98rem;
+      outline:none;
+      box-shadow:var(--shadow);
+    }
+
+    button{
+      color:white;
+      font-weight:800;
+      cursor:pointer;
+      transition:transform .08s ease, opacity .18s ease;
+      background:#334155;
+    }
+
+    button:active{transform:scale(.98)}
+
+    input, select, textarea{
+      width:100%;
+      background:rgba(255,255,255,.08);
+      color:white;
+      border:1px solid rgba(255,255,255,.06);
+    }
+
+    textarea{
+      min-height:120px;
+      resize:vertical;
+    }
+
+    input::placeholder, textarea::placeholder{color:#b5c7de}
+
+    .primary{background:linear-gradient(135deg,var(--blue2),var(--blue))}
+    .success{background:linear-gradient(135deg,#16a34a,var(--green))}
+    .warning{background:linear-gradient(135deg,#d97706,var(--amber))}
+    .danger{background:linear-gradient(135deg,#dc2626,var(--red))}
+    .violet{background:linear-gradient(135deg,#7c3aed,var(--violet))}
+    .ghost{background:#334155}
+
+    .result-box{
+      margin-top:10px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:18px;
+      padding:12px;
+    }
+
+    .result-big{
+      font-size:1.18rem;
+      font-weight:900;
+      margin-bottom:4px;
+    }
+
+    .result-small{
+      color:var(--muted);
+      font-size:.92rem;
+      line-height:1.4;
+    }
+
+    .attack{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding:12px 0;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+
+    .attack:last-child{border-bottom:none}
+    .attack-name{font-weight:900}
+    .attack-sub{font-size:.86rem;color:var(--muted);margin-top:4px}
+
+    .button-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    .enemy-list,.log-list{display:grid;gap:10px}
+
+    .enemy-card,.log-entry{
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:18px;
+      padding:12px;
+    }
+
+    .enemy-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:8px;
+    }
+
+    .pill{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:.8rem;
+      margin:4px 6px 0 0;
+      background:rgba(255,255,255,.08);
+    }
+
+    .healthy{background:rgba(34,197,94,.15);color:#86efac}
+    .bloodied{background:rgba(245,158,11,.15);color:#fcd34d}
+    .critical{background:rgba(239,68,68,.15);color:#fca5a5}
+    .defeated{background:rgba(127,29,29,.26);color:#fecaca}
+
+    .info-strip{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
     .mini-note{
       color:var(--muted);
-      font-size:.85rem;
+      font-size:.86rem;
       line-height:1.4;
     }
 
@@ -204,12 +280,12 @@
       text-align:center;
       color:var(--muted);
       font-size:.85rem;
-      padding:6px 0 18px;
+      padding:10px 0 18px;
     }
 
-    @media (max-width: 700px){
+    @media (max-width: 760px){
       .tabs{grid-template-columns:repeat(2,1fr)}
-      .two-col,.three-col,.stats{grid-template-columns:1fr}
+      .stats,.two-col,.three-col,.info-strip{grid-template-columns:1fr}
       .attack,.enemy-top{flex-direction:column;align-items:stretch}
       button{width:100%}
       .title{font-size:1.7rem}
@@ -219,8 +295,17 @@
 <body>
   <div class="wrap">
     <div class="hero">
-      <h1 class="title">🐾 Indominuz</h1>
-      <div class="subtitle">Level 3 Tabaxi Monk • Way of the Open Hand • Folk Hero</div>
+      <div class="title-row">
+        <div>
+          <h1 class="title">🐾 Indominuz</h1>
+          <div class="subtitle">Level 3 Tabaxi Monk • Way of the Open Hand • Folk Hero</div>
+        </div>
+        <div class="top-badges">
+          <div class="badge">⚡ Mobile Ready</div>
+          <div class="badge">💾 Auto Save</div>
+          <div class="badge">🎲 Combat App</div>
+        </div>
+      </div>
     </div>
 
     <div class="tabs">
@@ -236,9 +321,9 @@
         <div class="card">
           <h3>Core Stats</h3>
           <div class="stats">
-            <div class="stat"><div class="label">HP</div><div class="value" id="hpDisplay">26</div></div>
+            <div class="stat"><div class="label">Current HP</div><div class="value" id="hpDisplay">26</div></div>
             <div class="stat"><div class="label">Max HP</div><div class="value" id="maxHpDisplay">26</div></div>
-            <div class="stat"><div class="label">AC</div><div class="value" id="acDisplay">15</div></div>
+            <div class="stat"><div class="label">Armor Class</div><div class="value" id="acDisplay">15</div></div>
             <div class="stat"><div class="label">Speed</div><div class="value" id="speedDisplay">40 ft</div></div>
             <div class="stat"><div class="label">Ki</div><div class="value" id="kiDisplay">3/3</div></div>
             <div class="stat"><div class="label">Save DC</div><div class="value" id="saveDcDisplay">12</div></div>
@@ -246,8 +331,8 @@
         </div>
 
         <div class="card">
-          <h3>Health + Ki</h3>
-          <div class="two-col">
+          <h3>Health + Ki Control</h3>
+          <div class="info-strip">
             <div>
               <div class="label">Raw HP Input</div>
               <input id="rawHpInput" type="number" />
@@ -257,6 +342,7 @@
               <input id="hpStatusText" type="text" readonly />
             </div>
           </div>
+
           <div class="button-row" style="margin-top:10px">
             <button class="danger" onclick="changeHP(-10)">-10</button>
             <button class="danger" onclick="changeHP(-5)">-5</button>
@@ -265,13 +351,16 @@
             <button class="success" onclick="changeHP(5)">+5</button>
             <button class="success" onclick="changeHP(10)">+10</button>
           </div>
+
           <div class="button-row" style="margin-top:10px">
             <button class="warning" onclick="spendKi(1)">Spend 1 Ki</button>
             <button class="success" onclick="restoreKi(1)">Restore 1 Ki</button>
             <button class="ghost" onclick="restoreAllKi()">Restore All Ki</button>
           </div>
+
           <div class="result-box">
-            <div class="result-small">HP auto-clamps to max. Bloodied and critical thresholds update automatically.</div>
+            <div class="result-big">Auto HP Clamp Active</div>
+            <div class="result-small">Your HP can never go above max. Bloodied and critical states update automatically.</div>
           </div>
         </div>
 
@@ -302,8 +391,8 @@
 
           <div class="attack">
             <div>
-              <div class="attack-name">Advantage / Disadvantage</div>
-              <div class="attack-sub">Quarterstaff attack with advantage or disadvantage</div>
+              <div class="attack-name">Adv / Dis</div>
+              <div class="attack-sub">Quarterstaff with advantage or disadvantage</div>
             </div>
             <div class="button-row">
               <button class="primary" onclick="rollAttack('Quarterstaff', 'adv')">Adv</button>
@@ -314,7 +403,7 @@
           <div class="attack">
             <div>
               <div class="attack-name">Flurry of Blows</div>
-              <div class="attack-sub">Spends 1 Ki • Two unarmed strikes</div>
+              <div class="attack-sub">Spend 1 Ki • Roll 2 unarmed strikes</div>
             </div>
             <div class="button-row">
               <button class="violet" onclick="flurryOfBlows()">Flurry</button>
@@ -323,7 +412,7 @@
 
           <div class="result-box" id="diceResult">
             <div class="result-big">Ready to roll</div>
-            <div class="result-small">Tap attack or damage to roll.</div>
+            <div class="result-small">Use attack and damage buttons for quick play.</div>
           </div>
         </div>
 
@@ -335,6 +424,7 @@
             <button id="reactionBtn" class="ghost" onclick="toggleFlow('reactionUsed', this)">Reaction</button>
             <button id="felineBtn" class="ghost" onclick="toggleFlow('felineAgilityUsed', this)">Feline Agility</button>
           </div>
+
           <div class="button-row" style="margin-top:10px">
             <button class="warning" onclick="shortRest()">Short Rest</button>
             <button class="success" onclick="longRest()">Long Rest</button>
@@ -348,6 +438,7 @@
       <div class="grid">
         <div class="card">
           <h3>Open Hand Control</h3>
+
           <div class="two-col">
             <div>
               <div class="label">Target</div>
@@ -401,6 +492,7 @@
             <input id="enemyHp" type="number" placeholder="HP" />
             <input id="enemyAc" type="number" placeholder="AC" />
           </div>
+
           <div class="three-col" style="margin-top:10px">
             <input id="enemyInitMod" type="number" placeholder="Init Mod" />
             <select id="enemyBehavior">
@@ -423,7 +515,7 @@
     <div id="character" class="tab-panel">
       <div class="grid">
         <div class="card">
-          <h3>Character Sheet</h3>
+          <h3>Character Stats</h3>
           <div class="three-col">
             <div><div class="label">Level</div><input id="levelInput" type="number" min="1" max="20" /></div>
             <div><div class="label">STR</div><input id="strInput" type="number" /></div>
@@ -462,11 +554,11 @@
       </div>
     </div>
 
-    <div class="footer-note">Indominuz tracker • auto-saves on this device</div>
+    <div class="footer-note">Indominuz tracker • upgraded UI • auto-saves on this device</div>
   </div>
 
   <script>
-    const STORAGE_KEY = "indominuz-full-tracker-v1";
+    const STORAGE_KEY = "indominuz-ui-upgrade-v1";
 
     const defaultState = {
       character: {
@@ -501,10 +593,10 @@
     let state = loadState();
 
     function loadState(){
-      try {
+      try{
         const saved = localStorage.getItem(STORAGE_KEY);
         if(saved) return JSON.parse(saved);
-      } catch(e){}
+      }catch(e){}
       return JSON.parse(JSON.stringify(defaultState));
     }
 
@@ -561,60 +653,4 @@
       return 10 + getMod(state.character.dex) + getMod(state.character.wis);
     }
 
-    function speed(){
-      let s = 30;
-      if(state.character.level >= 2) s += 10;
-      if(state.character.level >= 6) s += 5;
-      if(state.character.level >= 10) s += 5;
-      if(state.character.level >= 14) s += 5;
-      if(state.character.level >= 18) s += 5;
-      return s;
-    }
-
-    function kiMax(){
-      return state.character.level >= 2 ? state.character.level : 0;
-    }
-
-    function kiCurrent(){
-      return Math.max(0, kiMax() - state.character.kiSpent);
-    }
-
-    function rollDie(sides){
-      return Math.floor(Math.random() * sides) + 1;
-    }
-
-    function addLog(text){
-      const time = new Date().toLocaleTimeString([], {hour:"numeric", minute:"2-digit"});
-      state.log.unshift(`${time} • ${text}`);
-      state.log = state.log.slice(0, 120);
-      saveState();
-      renderLog();
-    }
-
-    function changeHP(amount){
-      state.character.rawHp += amount;
-      saveState();
-      renderAll();
-    }
-
-    function spendKi(n){
-      state.character.kiSpent = Math.min(kiMax(), state.character.kiSpent + n);
-      saveState();
-      renderAll();
-    }
-
-    function restoreKi(n){
-      state.character.kiSpent = Math.max(0, state.character.kiSpent - n);
-      saveState();
-      renderAll();
-    }
-
-    function restoreAllKi(){
-      state.character.kiSpent = 0;
-      saveState();
-      renderAll();
-    }
-
-    function toggleFlow(key, btn){
-      state.character[key] = !state.character[key];
-      btn.classList.toggle
+    f
