@@ -1,0 +1,78 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Indominuz</title><style>
+body {
+  margin:0;
+  font-family: Arial;
+  background:#0f172a;
+  color:white;
+  padding:12px;
+}
+
+.card {
+  background:#1f2937;
+  padding:12px;
+  margin-bottom:12px;
+  border-radius:14px;
+}
+
+button {
+  padding:10px;
+  margin:4px;
+  border:none;
+  border-radius:10px;
+  font-weight:bold;
+}
+
+.primary { background:#3b82f6; color:white; }
+.success { background:#22c55e; color:white; }
+.danger { background:#ef4444; color:white; }
+
+</style></head><body><h1>🐾 Indominuz</h1><div class="card">
+<h3>HP</h3>
+<div id="hp">26</div>
+<button class="danger" onclick="changeHP(-5)">-5</button>
+<button class="success" onclick="changeHP(5)">+5</button>
+</div><div class="card">
+<h3>Dice Roller</h3>
+<button class="primary" onclick="roll()">Roll d20</button>
+<div id="result"></div>
+</div><div class="card">
+<h3>Enemy Tracker</h3>
+<input id="enemyName" placeholder="Enemy name"><br>
+<input id="enemyHp" placeholder="HP" type="number"><br>
+<button onclick="addEnemy()">Add Enemy</button>
+<div id="enemies"></div>
+</div><script>
+let hp = 26;
+let enemies = [];
+
+function changeHP(amount){
+  hp += amount;
+  if(hp<0) hp=0;
+  document.getElementById("hp").innerText = hp;
+}
+
+function roll(){
+  const num = Math.floor(Math.random()*20)+1;
+  document.getElementById("result").innerText = "Rolled: " + num;
+}
+
+function addEnemy(){
+  const name = document.getElementById("enemyName").value;
+  const hp = document.getElementById("enemyHp").value;
+  enemies.push({name,hp});
+  renderEnemies();
+}
+
+function renderEnemies(){
+  let html="";
+  enemies.forEach(e=>{
+    html += "<div>"+e.name+" ("+e.hp+" HP)</div>";
+  });
+  document.getElementById("enemies").innerHTML = html;
+}
+</script></body>
+</html>
