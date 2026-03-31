@@ -1,261 +1,154 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Indominuz App</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Indominuz V2</title>
 
 <style>
-body{
-  margin:0;
-  font-family:Arial;
-  background:#0f172a;
-  color:white;
-}
-.wrap{max-width:900px;margin:auto;padding:10px}
-.card{background:#1e293b;padding:14px;border-radius:16px;margin-bottom:10px}
-button{
-  border:none;
-  padding:10px;
-  border-radius:10px;
-  font-weight:bold;
-  color:white;
-  background:#334155;
-}
+body{background:#0f172a;color:white;font-family:Arial;margin:0;padding:10px}
+.card{background:#1e293b;padding:12px;border-radius:14px;margin-bottom:10px}
+button{padding:10px;border:none;border-radius:10px;margin:4px;font-weight:bold;color:white;background:#334155}
 .primary{background:#3b82f6}
 .success{background:#22c55e}
 .danger{background:#ef4444}
-.warning{background:#f59e0b}
-.tabs{display:flex;gap:6px;margin-bottom:10px}
-.tab{flex:1;padding:10px;background:#1e293b;border-radius:10px;text-align:center}
-.active{background:#3b82f6}
-.hidden{display:none}
-.enemy{background:#0f172a;padding:10px;border-radius:10px;margin-top:8px}
+.enemy{background:#020617;padding:10px;border-radius:10px;margin-top:8px;border:2px solid transparent}
+.enemy.active{border:2px solid #3b82f6}
 .hpbar{height:8px;background:#ef4444;border-radius:10px;margin-top:4px}
+.turn{outline:2px solid yellow}
 .log{font-size:.9rem;color:#cbd5f5}
 </style>
 </head>
 
 <body>
-<div class="wrap">
 
-<h2>🐾 Indominuz</h2>
-
-<div class="tabs">
-<div class="tab active" onclick="showTab('combat')">Combat</div>
-<div class="tab" onclick="showTab('enemies')">Enemies</div>
-<div class="tab" onclick="showTab('char')">Character</div>
-<div class="tab" onclick="showTab('log')">Log</div>
-</div>
-
-<!-- COMBAT -->
-<div id="combat" class="tabPage">
+<h2>🐾 Indominuz V2</h2>
 
 <div class="card">
-<h3>HP / Ki</h3>
-HP: <span id="hp">26</span>/<span id="maxHp">26</span><br>
-Ki: <span id="ki">3</span>/<span id="kiMax">3</span>
-
-<div>
-<button class="danger" onclick="changeHP(-5)">-5</button>
-<button class="success" onclick="changeHP(5)">+5</button>
-<button class="warning" onclick="spendKi()">Use Ki</button>
-</div>
+HP <span id="hp">26</span>/<span id="maxHp">26</span> |
+Ki <span id="ki">3</span>
 </div>
 
 <div class="card">
-<h3>Dice Roller</h3>
-<button onclick="rollAttack()">Attack</button>
-<button onclick="rollDamage()">Damage</button>
-<button onclick="rollAdv()">Adv</button>
-<button onclick="rollDis()">Dis</button>
-<div id="diceResult"></div>
+<button onclick="attack()">Attack</button>
+<button onclick="flurry()">Flurry</button>
+<button onclick="nextTurn()">Next Turn</button>
+<div id="result"></div>
 </div>
 
 <div class="card">
-<h3>Turn Tracker</h3>
-<button onclick="toggle('action')" id="action">Action</button>
-<button onclick="toggle('bonus')" id="bonus">Bonus</button>
-<button onclick="toggle('reaction')" id="reaction">Reaction</button>
-<button onclick="resetTurn()">Reset</button>
-</div>
+<h3>Enemies</h3>
+<input id="name" placeholder="Name">
+<input id="hpInput" type="number" placeholder="HP">
+<input id="acInput" type="number" placeholder="AC">
+<input id="initInput" type="number" placeholder="Init">
+<button onclick="addEnemy()">Add</button>
 
-</div>
-
-<!-- ENEMIES -->
-<div id="enemies" class="tabPage hidden">
-
-<div class="card">
-<h3>Add Enemy</h3>
-<input id="ename" placeholder="Name">
-<input id="ehp" type="number" placeholder="HP">
-<input id="einit" type="number" placeholder="Init">
-<button class="primary" onclick="addEnemy()">Add</button>
+<div id="enemies"></div>
 </div>
 
 <div class="card">
-<h3>Enemy List</h3>
-<div id="enemyList"></div>
-</div>
-
-</div>
-
-<!-- CHARACTER -->
-<div id="char" class="tabPage hidden">
-
-<div class="card">
-Level <input id="level" type="number" value="3">
-DEX <input id="dex" type="number" value="16">
-WIS <input id="wis" type="number" value="15">
-<button onclick="saveChar()">Save</button>
-</div>
-
-</div>
-
-<!-- LOG -->
-<div id="log" class="tabPage hidden">
-<div class="card">
-<h3>Combat Log</h3>
-<div id="logBox"></div>
-<button onclick="clearLog()">Clear</button>
-</div>
-</div>
-
+<h3>Log</h3>
+<div id="log"></div>
 </div>
 
 <script>
 
-let state = JSON.parse(localStorage.getItem("app")) || {
-hp:26,maxHp:26,ki:3,kiMax:3,
+let state = JSON.parse(localStorage.getItem("v2")) || {
+hp:26,maxHp:26,ki:3,
 enemies:[],
+turn:0,
+round:1,
+target:null,
 log:[]
 };
 
-function save(){
-localStorage.setItem("app",JSON.stringify(state));
-}
-
-function showTab(id){
-document.querySelectorAll(".tabPage").forEach(x=>x.classList.add("hidden"));
-document.getElementById(id).classList.remove("hidden");
-document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-event.target.classList.add("active");
-}
-
-function changeHP(n){
-state.hp=Math.max(0,Math.min(state.maxHp,state.hp+n));
-log("HP "+(n>0?"+":"")+n);
-render();
-}
-
-function spendKi(){
-if(state.ki>0){state.ki--;log("Used Ki")}
-render();
-}
-
-function rollAttack(){
-let d=Math.floor(Math.random()*20)+1;
-let total=d+5;
-log("Attack "+total);
-document.getElementById("diceResult").innerText=total;
-}
-
-function rollDamage(){
-let d=Math.floor(Math.random()*8)+1+3;
-log("Damage "+d);
-document.getElementById("diceResult").innerText=d;
-}
-
-function rollAdv(){
-let a=Math.floor(Math.random()*20)+1;
-let b=Math.floor(Math.random()*20)+1;
-let r=Math.max(a,b)+5;
-log("Adv "+r);
-document.getElementById("diceResult").innerText=r;
-}
-
-function rollDis(){
-let a=Math.floor(Math.random()*20)+1;
-let b=Math.floor(Math.random()*20)+1;
-let r=Math.min(a,b)+5;
-log("Dis "+r);
-document.getElementById("diceResult").innerText=r;
-}
-
-function toggle(id){
-let btn=document.getElementById(id);
-btn.classList.toggle("primary");
-}
-
-function resetTurn(){
-["action","bonus","reaction"].forEach(x=>{
-document.getElementById(x).classList.remove("primary");
-});
-}
-
-function addEnemy(){
-let name=ename.value;
-let hp=parseInt(ehp.value);
-let init=parseInt(einit.value)||0;
-if(!name||!hp)return;
-
-state.enemies.push({name,hp,maxHp:hp,init});
-state.enemies.sort((a,b)=>b.init-a.init);
-render();
-}
-
-function renderEnemies(){
-enemyList.innerHTML=state.enemies.map((e,i)=>{
-let percent=(e.hp/e.maxHp)*100;
-return `
-<div class="enemy">
-<b>${e.name}</b> (${e.init})
-<div>${e.hp}/${e.maxHp}</div>
-<div class="hpbar" style="width:${percent}%"></div>
-<button onclick="dmgEnemy(${i},5)">-5</button>
-<button onclick="healEnemy(${i},5)">+5</button>
-</div>
-`;
-}).join("");
-}
-
-function dmgEnemy(i,n){
-state.enemies[i].hp=Math.max(0,state.enemies[i].hp-n);
-log(state.enemies[i].name+" -"+n);
-render();
-}
-
-function healEnemy(i,n){
-state.enemies[i].hp=Math.min(state.enemies[i].maxHp,state.enemies[i].hp+n);
-render();
-}
+function save(){localStorage.setItem("v2",JSON.stringify(state));}
 
 function log(t){
 state.log.unshift(t);
 renderLog();
 }
 
+function roll(d){return Math.floor(Math.random()*d)+1}
+
+function attack(){
+if(state.target===null)return alert("Select target!");
+
+let e=state.enemies[state.target];
+let r=roll(20);
+let total=r+5;
+
+if(r===20){
+let dmg=roll(8)+3+roll(8);
+e.hp-=dmg;
+log("CRIT! "+dmg);
+}else if(total>=e.ac){
+let dmg=roll(8)+3;
+e.hp-=dmg;
+log("Hit "+dmg);
+}else{
+log("Miss");
+}
+
+render();
+}
+
+function flurry(){
+if(state.ki<=0)return;
+state.ki--;
+
+for(let i=0;i<2;i++) attack();
+
+render();
+}
+
+function addEnemy(){
+let n=name.value;
+let hp=parseInt(hpInput.value);
+let ac=parseInt(acInput.value);
+let init=parseInt(initInput.value)||0;
+
+state.enemies.push({name:n,hp,maxHp:hp,ac,init});
+state.enemies.sort((a,b)=>b.init-a.init);
+render();
+}
+
+function renderEnemies(){
+enemies.innerHTML=state.enemies.map((e,i)=>{
+let percent=(e.hp/e.maxHp)*100;
+return `
+<div class="enemy ${i===state.target?'active':''} ${i===state.turn?'turn':''}"
+onclick="select(${i})">
+<b>${e.name}</b> AC:${e.ac}<br>
+${e.hp}/${e.maxHp}
+<div class="hpbar" style="width:${percent}%"></div>
+</div>
+`;
+}).join("");
+}
+
+function select(i){
+state.target=i;
+render();
+}
+
+function nextTurn(){
+state.turn++;
+if(state.turn>=state.enemies.length){
+state.turn=0;
+state.round++;
+}
+log("Round "+state.round);
+render();
+}
+
 function renderLog(){
-logBox.innerHTML=state.log.map(x=>`<div class="log">${x}</div>`).join("");
-}
-
-function clearLog(){
-state.log=[];
-renderLog();
-}
-
-function saveChar(){
-state.level=level.value;
-state.dex=dex.value;
-state.wis=wis.value;
-save();
+log.innerHTML=state.log.map(x=>"<div class='log'>"+x+"</div>").join("");
 }
 
 function render(){
 hp.innerText=state.hp;
-maxHp.innerText=state.maxHp;
 ki.innerText=state.ki;
-kiMax.innerText=state.kiMax;
 renderEnemies();
 renderLog();
 save();
@@ -264,5 +157,6 @@ save();
 render();
 
 </script>
+
 </body>
 </html>
