@@ -475,7 +475,7 @@
 
           <div class="button-row">
             <button class="violet" id="flurryBtn">Flurry of Blows</button>
-            <button class="warning" id="stunLikeBtn">Open Hand Effect</button>
+            <button class="warning" id="openHandBtn">Open Hand Effect</button>
           </div>
         </div>
 
@@ -646,64 +646,48 @@
 </div>
 
 <script>
-const STORAGE_KEY = "indominuz-serious-app-v1";
+document.addEventListener("DOMContentLoaded", function () {
+  const STORAGE_KEY = "indominuz-serious-app-v2";
 
-const defaultState = {
-  character: {
-    level: 3,
-    str: 10,
-    dex: 16,
-    con: 14,
-    intStat: 8,
-    wis: 15,
-    cha: 10,
-    rawHp: 26,
-    gold: 50,
-    xp: 900,
-    kiSpent: 0,
-    actionUsed: false,
-    bonusUsed: false,
-    reactionUsed: false,
-    felineAgilityUsed: false,
-    notes: ""
-  },
-  enemies: [],
-  inventory: [],
-  log: ["Indominuz enters combat."],
-  round: 1,
-  currentTurnIndex: 0,
-  targetId: null,
-  openHandEffect: "Knock Prone"
-};
+  const defaultState = {
+    character: {
+      level: 3,
+      str: 10,
+      dex: 16,
+      con: 14,
+      intStat: 8,
+      wis: 15,
+      cha: 10,
+      rawHp: 26,
+      gold: 50,
+      xp: 900,
+      kiSpent: 0,
+      actionUsed: false,
+      bonusUsed: false,
+      reactionUsed: false,
+      felineAgilityUsed: false,
+      notes: ""
+    },
+    enemies: [],
+    inventory: [],
+    log: ["Indominuz enters combat."],
+    round: 1,
+    currentTurnIndex: 0,
+    targetId: null,
+    openHandEffect: "Knock Prone"
+  };
 
-let state = loadState();
+  function loadState(){
+    try{
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+      if(!saved) return JSON.parse(JSON.stringify(defaultState));
 
-function loadState(){
-  try{
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if(saved) return JSON.parse(saved);
-  }catch(e){}
-  return JSON.parse(JSON.stringify(defaultState));
-}
-
-function saveState(){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-
-function mod(score){
-  return Math.floor((score - 10) / 2);
-}
-
-function fmtMod(n){
-  return n >= 0 ? "+" + n : String(n);
-}
-
-function profBonus(level){
-  if(level >= 17) return 6;
-  if(level >= 13) return 5;
-  if(level >= 9) return 4;
-  if(level >= 5) return 3;
-  return 2;
-}
-
-functi
+      return {
+        ...defaultState,
+        ...saved,
+        character: {
+          ...defaultState.character,
+          ...(saved.character || {})
+        },
+        enemies: Array.isArray(saved.enemies) ? saved.enemies : [],
+        inventory: Array.isArray(saved.inventory) ? saved.i
