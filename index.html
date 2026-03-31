@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,289 +18,290 @@
       --warn:#f59e0b;
       --shadow: 0 10px 25px rgba(0,0,0,.35);
       --radius: 18px;
-    }* { box-sizing: border-box; }
+    }
 
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  color: var(--text);
-  background:
-    radial-gradient(circle at top, #1e3a8a 0%, transparent 35%),
-    linear-gradient(180deg, var(--bg1), var(--bg2));
-  min-height: 100vh;
-  padding: 14px;
-}
+    * { box-sizing: border-box; }
 
-.wrap {
-  max-width: 720px;
-  margin: 0 auto;
-}
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, #1e3a8a 0%, transparent 35%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      min-height: 100vh;
+      padding: 14px;
+    }
 
-.hero {
-  background: linear-gradient(135deg, rgba(59,130,246,.25), rgba(34,197,94,.18));
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 24px;
-  padding: 18px;
-  box-shadow: var(--shadow);
-  margin-bottom: 14px;
-}
+    .wrap {
+      max-width: 720px;
+      margin: 0 auto;
+    }
 
-.title {
-  font-size: 1.9rem;
-  font-weight: 800;
-  margin: 0 0 4px 0;
-  letter-spacing: .3px;
-}
+    .hero {
+      background: linear-gradient(135deg, rgba(59,130,246,.25), rgba(34,197,94,.18));
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      margin-bottom: 14px;
+    }
 
-.subtitle {
-  color: var(--muted);
-  margin: 0;
-  font-size: 0.95rem;
-}
+    .title {
+      font-size: 1.9rem;
+      font-weight: 800;
+      margin: 0 0 4px 0;
+      letter-spacing: .3px;
+    }
 
-.grid {
-  display: grid;
-  gap: 12px;
-}
+    .subtitle {
+      color: var(--muted);
+      margin: 0;
+      font-size: 0.95rem;
+    }
 
-.card {
-  background: linear-gradient(180deg, rgba(31,41,55,.96), rgba(17,24,39,.96));
-  border: 1px solid rgba(255,255,255,.07);
-  border-radius: var(--radius);
-  padding: 14px;
-  box-shadow: var(--shadow);
-}
+    .grid {
+      display: grid;
+      gap: 12px;
+    }
 
-.card h3 {
-  margin: 0 0 12px 0;
-  font-size: 1.05rem;
-}
+    .card {
+      background: linear-gradient(180deg, rgba(31,41,55,.96), rgba(17,24,39,.96));
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
 
-.stats {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-}
+    .card h3 {
+      margin: 0 0 12px 0;
+      font-size: 1.05rem;
+    }
 
-.stat {
-  background: rgba(255,255,255,.04);
-  border-radius: 14px;
-  padding: 10px;
-  border: 1px solid rgba(255,255,255,.05);
-}
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
 
-.label {
-  color: var(--muted);
-  font-size: .82rem;
-  margin-bottom: 4px;
-}
+    .stat {
+      background: rgba(255,255,255,.04);
+      border-radius: 14px;
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,.05);
+    }
 
-.value {
-  font-size: 1.35rem;
-  font-weight: 700;
-}
+    .label {
+      color: var(--muted);
+      font-size: .82rem;
+      margin-bottom: 4px;
+    }
 
-.button-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
+    .value {
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
 
-button, input, select {
-  appearance: none;
-  border: none;
-  border-radius: 12px;
-  padding: 11px 14px;
-  font-size: .98rem;
-  font-weight: 700;
-  box-shadow: var(--shadow);
-}
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
 
-input, select {
-  width: 100%;
-  background: rgba(255,255,255,.08);
-  color: white;
-  font-weight: 500;
-  outline: none;
-}
+    button, input, select {
+      appearance: none;
+      border: none;
+      border-radius: 12px;
+      padding: 11px 14px;
+      font-size: .98rem;
+      font-weight: 700;
+      box-shadow: var(--shadow);
+    }
 
-input::placeholder {
-  color: #cbd5e1;
-}
+    input, select {
+      width: 100%;
+      background: rgba(255,255,255,.08);
+      color: white;
+      font-weight: 500;
+      outline: none;
+    }
 
-button {
-  color: white;
-  background: #374151;
-  transition: transform .05s ease, opacity .2s ease, background .2s ease;
-  cursor: pointer;
-}
+    input::placeholder {
+      color: #cbd5e1;
+    }
 
-button:active {
-  transform: scale(0.98);
-}
+    button {
+      color: white;
+      background: #374151;
+      transition: transform .05s ease, opacity .2s ease, background .2s ease;
+      cursor: pointer;
+    }
 
-.toggle.active {
-  background: linear-gradient(135deg, var(--accent), #16a34a);
-}
+    button:active {
+      transform: scale(0.98);
+    }
 
-.ki-btn.used {
-  background: linear-gradient(135deg, var(--warn), #d97706);
-}
+    .toggle.active {
+      background: linear-gradient(135deg, var(--accent), #16a34a);
+    }
 
-.primary { background: linear-gradient(135deg, var(--accent2), #2563eb); }
-.danger { background: linear-gradient(135deg, var(--danger), #dc2626); }
-.success { background: linear-gradient(135deg, var(--accent), #16a34a); }
-.warning { background: linear-gradient(135deg, var(--warn), #d97706); }
+    .ki-btn.used {
+      background: linear-gradient(135deg, var(--warn), #d97706);
+    }
 
-.attack, .enemy-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(255,255,255,.06);
-}
+    .primary { background: linear-gradient(135deg, var(--accent2), #2563eb); }
+    .danger { background: linear-gradient(135deg, var(--danger), #dc2626); }
+    .success { background: linear-gradient(135deg, var(--accent), #16a34a); }
+    .warning { background: linear-gradient(135deg, var(--warn), #d97706); }
 
-.attack:last-child, .enemy-row:last-child { border-bottom: none; }
+    .attack, .enemy-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
 
-.attack-name, .enemy-name {
-  font-weight: 700;
-}
+    .attack:last-child, .enemy-row:last-child { border-bottom: none; }
 
-.attack-sub, .enemy-sub {
-  color: var(--muted);
-  font-size: .85rem;
-  margin-top: 3px;
-}
+    .attack-name, .enemy-name {
+      font-weight: 700;
+    }
 
-.result-box {
-  margin-top: 10px;
-  background: rgba(255,255,255,.04);
-  border: 1px solid rgba(255,255,255,.06);
-  border-radius: 14px;
-  padding: 12px;
-}
+    .attack-sub, .enemy-sub {
+      color: var(--muted);
+      font-size: .85rem;
+      margin-top: 3px;
+    }
 
-.result-big {
-  font-size: 1.35rem;
-  font-weight: 800;
-  margin-bottom: 4px;
-}
+    .result-box {
+      margin-top: 10px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 14px;
+      padding: 12px;
+    }
 
-.result-small {
-  color: var(--muted);
-  font-size: .92rem;
-  line-height: 1.35;
-}
+    .result-big {
+      font-size: 1.35rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
 
-.mini-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
+    .result-small {
+      color: var(--muted);
+      font-size: .92rem;
+      line-height: 1.35;
+    }
 
-.enemy-grid {
-  display: grid;
-  grid-template-columns: 1.4fr .7fr .9fr;
-  gap: 8px;
-  margin-bottom: 10px;
-}
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
 
-.enemy-list {
-  display: grid;
-  gap: 10px;
-}
+    .enemy-grid {
+      display: grid;
+      grid-template-columns: 1.4fr .7fr .9fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
 
-.enemy-card {
-  background: rgba(255,255,255,.04);
-  border: 1px solid rgba(255,255,255,.06);
-  border-radius: 14px;
-  padding: 12px;
-}
+    .enemy-list {
+      display: grid;
+      gap: 10px;
+    }
 
-.enemy-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
+    .enemy-card {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 14px;
+      padding: 12px;
+    }
 
-.enemy-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
-}
+    .enemy-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
 
-.pill {
-  display: inline-block;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(255,255,255,.08);
-  color: var(--muted);
-  font-size: .82rem;
-  margin-right: 6px;
-  margin-top: 6px;
-}
+    .enemy-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
 
-.level-grid {
-  display:grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap:10px;
-}
+    .pill {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      color: var(--muted);
+      font-size: .82rem;
+      margin-right: 6px;
+      margin-top: 6px;
+    }
 
-.stat-editor-grid {
-  display:grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap:10px;
-}
+    .level-grid {
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+    }
 
-.stat-editor-card {
-  background: rgba(255,255,255,.04);
-  border: 1px solid rgba(255,255,255,.06);
-  border-radius: 14px;
-  padding: 12px;
-}
+    .stat-editor-grid {
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:10px;
+    }
 
-.editor-top {
-  display:flex;
-  justify-content: space-between;
-  align-items:center;
-  margin-bottom:8px;
-}
+    .stat-editor-card {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 14px;
+      padding: 12px;
+    }
 
-.editor-name {
-  font-weight:700;
-}
+    .editor-top {
+      display:flex;
+      justify-content: space-between;
+      align-items:center;
+      margin-bottom:8px;
+    }
 
-.editor-mod {
-  color: var(--muted);
-  font-size:.9rem;
-}
+    .editor-name {
+      font-weight:700;
+    }
 
-.editor-score {
-  font-size:1.4rem;
-  font-weight:800;
-  margin-bottom:10px;
-}
+    .editor-mod {
+      color: var(--muted);
+      font-size:.9rem;
+    }
 
-.footer-note {
-  color: var(--muted);
-  font-size: .85rem;
-  text-align: center;
-  padding: 8px 0 18px;
-}
+    .editor-score {
+      font-size:1.4rem;
+      font-weight:800;
+      margin-bottom:10px;
+    }
 
-@media (max-width: 480px) {
-  .stats, .mini-grid, .level-grid, .stat-editor-grid { grid-template-columns: 1fr 1fr; }
-  .title { font-size: 1.6rem; }
-  button { width: 100%; }
-  .button-row.stack-mobile button { width: 100%; }
-  .attack, .enemy-row, .enemy-top { flex-direction: column; align-items: stretch; }
-  .enemy-grid { grid-template-columns: 1fr; }
-}
+    .footer-note {
+      color: var(--muted);
+      font-size: .85rem;
+      text-align: center;
+      padding: 8px 0 18px;
+    }
 
+    @media (max-width: 480px) {
+      .stats, .mini-grid, .level-grid, .stat-editor-grid { grid-template-columns: 1fr 1fr; }
+      .title { font-size: 1.6rem; }
+      button { width: 100%; }
+      .button-row.stack-mobile button { width: 100%; }
+      .attack, .enemy-row, .enemy-top { flex-direction: column; align-items: stretch; }
+      .enemy-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -307,238 +309,241 @@ button:active {
     <div class="hero">
       <h1 class="title">🐾 Indominuz</h1>
       <p class="subtitle"><span id="levelSubtitle">Level 3</span> Tabaxi Monk • Way of the Open Hand • Folk Hero</p>
-    </div><div class="grid">
-  <div class="card">
-    <h3>Level Up</h3>
-    <div class="level-grid">
-      <div class="stat">
-        <div class="label">Current Level</div>
-        <div class="value" id="levelDisplay">3</div>
-      </div>
-      <div class="stat">
-        <div class="label">DEX</div>
-        <div class="value" id="dexDisplay">16</div>
-      </div>
-      <div class="stat">
-        <div class="label">WIS</div>
-        <div class="value" id="wisDisplay">15</div>
-      </div>
     </div>
-    <div class="button-row" style="margin-top:10px;">
-      <button class="success" onclick="levelUp()">Level Up +1</button>
-      <button class="warning" onclick="applyASI('dex')">ASI: +2 DEX</button>
-      <button class="warning" onclick="applyASI('wis')">ASI: +2 WIS</button>
-      <button class="danger" onclick="resetBuild()">Reset Build</button>
-    </div>
-    <div class="result-box" id="levelResult">
-      <div class="result-big">Level 3 ready</div>
-      <div class="result-small">Level Up increases monk level, max HP, Ki, and level-based features. Use ASI buttons at level 4+ when you want stat upgrades.</div>
-    </div>
-  </div>
 
-  <div class="card">
-    <h3>Stat Editor</h3>
-    <div class="stat-editor-grid">
-      <div class="stat-editor-card">
-        <div class="editor-top"><span class="editor-name">STR</span><span class="editor-mod" id="strMod">+0</span></div>
-        <div class="editor-score" id="strScore">10</div>
-        <div class="button-row">
-          <button class="danger" onclick="adjustStat('str', -1)">-1</button>
-          <button class="success" onclick="adjustStat('str', 1)">+1</button>
+    <div class="grid">
+      <div class="card">
+        <h3>Level Up</h3>
+        <div class="level-grid">
+          <div class="stat">
+            <div class="label">Current Level</div>
+            <div class="value" id="levelDisplay">3</div>
+          </div>
+          <div class="stat">
+            <div class="label">DEX</div>
+            <div class="value" id="dexDisplay">16</div>
+          </div>
+          <div class="stat">
+            <div class="label">WIS</div>
+            <div class="value" id="wisDisplay">15</div>
+          </div>
+        </div>
+        <div class="button-row" style="margin-top:10px;">
+          <button class="success" onclick="levelUp()">Level Up +1</button>
+          <button class="warning" onclick="applyASI('dex')">ASI: +2 DEX</button>
+          <button class="warning" onclick="applyASI('wis')">ASI: +2 WIS</button>
+          <button class="danger" onclick="resetBuild()">Reset Build</button>
+        </div>
+        <div class="result-box" id="levelResult">
+          <div class="result-big">Level 3 ready</div>
+          <div class="result-small">Level Up increases monk level, max HP, Ki, and level-based features. Use ASI buttons at level 4+ when you want stat upgrades.</div>
         </div>
       </div>
-      <div class="stat-editor-card">
-        <div class="editor-top"><span class="editor-name">DEX</span><span class="editor-mod" id="dexModLabel">+3</span></div>
-        <div class="editor-score" id="dexScore">16</div>
-        <div class="button-row">
-          <button class="danger" onclick="adjustStat('dex', -1)">-1</button>
-          <button class="success" onclick="adjustStat('dex', 1)">+1</button>
+
+      <div class="card">
+        <h3>Stat Editor</h3>
+        <div class="stat-editor-grid">
+          <div class="stat-editor-card">
+            <div class="editor-top"><span class="editor-name">STR</span><span class="editor-mod" id="strMod">+0</span></div>
+            <div class="editor-score" id="strScore">10</div>
+            <div class="button-row">
+              <button class="danger" onclick="adjustStat('str', -1)">-1</button>
+              <button class="success" onclick="adjustStat('str', 1)">+1</button>
+            </div>
+          </div>
+          <div class="stat-editor-card">
+            <div class="editor-top"><span class="editor-name">DEX</span><span class="editor-mod" id="dexModLabel">+3</span></div>
+            <div class="editor-score" id="dexScore">16</div>
+            <div class="button-row">
+              <button class="danger" onclick="adjustStat('dex', -1)">-1</button>
+              <button class="success" onclick="adjustStat('dex', 1)">+1</button>
+            </div>
+          </div>
+          <div class="stat-editor-card">
+            <div class="editor-top"><span class="editor-name">CON</span><span class="editor-mod" id="conMod">+2</span></div>
+            <div class="editor-score" id="conScore">14</div>
+            <div class="button-row">
+              <button class="danger" onclick="adjustStat('con', -1)">-1</button>
+              <button class="success" onclick="adjustStat('con', 1)">+1</button>
+            </div>
+          </div>
+          <div class="stat-editor-card">
+            <div class="editor-top"><span class="editor-name">INT</span><span class="editor-mod" id="intMod">-1</span></div>
+            <div class="editor-score" id="intScore">8</div>
+            <div class="button-row">
+              <button class="danger" onclick="adjustStat('intStat', -1)">-1</button>
+              <button class="success" onclick="adjustStat('intStat', 1)">+1</button>
+            </div>
+          </div>
+          <div class="stat-editor-card">
+            <div class="editor-top"><span class="editor-name">WIS</span><span class="editor-mod" id="wisModLabel">+2</span></div>
+            <div class="editor-score" id="wisScore">15</div>
+            <div class="button-row">
+              <button class="danger" onclick="adjustStat('wis', -1)">-1</button>
+              <button class="success" onclick="adjustStat('wis', 1)">+1</button>
+            </div>
+          </div>
+          <div class="stat-editor-card">
+            <div class="editor-top"><span class="editor-name">CHA</span><span class="editor-mod" id="chaMod">+0</span></div>
+            <div class="editor-score" id="chaScore">10</div>
+            <div class="button-row">
+              <button class="danger" onclick="adjustStat('cha', -1)">-1</button>
+              <button class="success" onclick="adjustStat('cha', 1)">+1</button>
+            </div>
+          </div>
+        </div>
+        <div class="button-row" style="margin-top:10px;">
+          <button class="warning" onclick="resetStatsOnly()">Reset Stats Only</button>
+        </div>
+        <div class="result-box" id="statResult">
+          <div class="result-big">Stat editor ready</div>
+          <div class="result-small">Changing ability scores updates AC, attack bonus, damage, max HP, and save DC automatically.</div>
         </div>
       </div>
-      <div class="stat-editor-card">
-        <div class="editor-top"><span class="editor-name">CON</span><span class="editor-mod" id="conMod">+2</span></div>
-        <div class="editor-score" id="conScore">14</div>
-        <div class="button-row">
-          <button class="danger" onclick="adjustStat('con', -1)">-1</button>
-          <button class="success" onclick="adjustStat('con', 1)">+1</button>
+
+      <div class="card">
+        <h3>Core Stats</h3>
+        <div class="stats">
+          <div class="stat"><div class="label">HP</div><div class="value" id="hp">26</div></div>
+          <div class="stat"><div class="label">Max HP</div><div class="value" id="maxHp">26</div></div>
+          <div class="stat"><div class="label">AC</div><div class="value" id="acDisplay">15</div></div>
+          <div class="stat"><div class="label">Speed</div><div class="value" id="speedDisplay">40 ft</div></div>
+          <div class="stat"><div class="label">Ki Remaining</div><div class="value"><span id="kiRemaining">3</span>/<span id="kiMaxDisplay">3</span></div></div>
+          <div class="stat"><div class="label">Burst Speed</div><div class="value" id="burstSpeedDisplay">80 ft</div></div>
         </div>
       </div>
-      <div class="stat-editor-card">
-        <div class="editor-top"><span class="editor-name">INT</span><span class="editor-mod" id="intMod">-1</span></div>
-        <div class="editor-score" id="intScore">8</div>
+
+      <div class="card">
+        <h3>HP Tracker</h3>
         <div class="button-row">
-          <button class="danger" onclick="adjustStat('intStat', -1)">-1</button>
-          <button class="success" onclick="adjustStat('intStat', 1)">+1</button>
+          <button class="danger" onclick="changeHP(-10)">-10</button>
+          <button class="danger" onclick="changeHP(-5)">-5</button>
+          <button class="danger" onclick="changeHP(-1)">-1</button>
+          <button class="success" onclick="changeHP(1)">+1</button>
+          <button class="success" onclick="changeHP(5)">+5</button>
+          <button class="success" onclick="changeHP(10)">+10</button>
         </div>
       </div>
-      <div class="stat-editor-card">
-        <div class="editor-top"><span class="editor-name">WIS</span><span class="editor-mod" id="wisModLabel">+2</span></div>
-        <div class="editor-score" id="wisScore">15</div>
-        <div class="button-row">
-          <button class="danger" onclick="adjustStat('wis', -1)">-1</button>
-          <button class="success" onclick="adjustStat('wis', 1)">+1</button>
+
+      <div class="card">
+        <h3>Ki Tracker</h3>
+        <div class="button-row" id="kiButtons"></div>
+        <div class="result-box">
+          <div class="result-small">Tap each Ki point when you spend or recover it.</div>
         </div>
       </div>
-      <div class="stat-editor-card">
-        <div class="editor-top"><span class="editor-name">CHA</span><span class="editor-mod" id="chaMod">+0</span></div>
-        <div class="editor-score" id="chaScore">10</div>
+
+      <div class="card">
+        <h3>Turn Tracker</h3>
         <div class="button-row">
-          <button class="danger" onclick="adjustStat('cha', -1)">-1</button>
-          <button class="success" onclick="adjustStat('cha', 1)">+1</button>
+          <button class="toggle" onclick="toggleButton(this)">Attack</button>
+          <button class="toggle" onclick="toggleButton(this)">Bonus Action</button>
+          <button class="toggle" onclick="toggleButton(this)">Reaction</button>
+          <button class="toggle" onclick="toggleButton(this)">Feline Agility</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Dice Roller</h3>
+
+        <div class="attack">
+          <div>
+            <div class="attack-name">Quarterstaff</div>
+            <div class="attack-sub" id="quarterstaffText">Attack +5 • Damage 1d8+3</div>
+          </div>
+          <div class="button-row stack-mobile">
+            <button class="primary" onclick="rollAttack('Quarterstaff', getAttackBonus())">Roll Attack</button>
+            <button class="success" onclick="rollDamage('Quarterstaff', 8, getDexMod())">Roll Damage</button>
+          </div>
+        </div>
+
+        <div class="attack">
+          <div>
+            <div class="attack-name">Unarmed Strike</div>
+            <div class="attack-sub" id="unarmedText">Attack +5 • Damage 1d4+3</div>
+          </div>
+          <div class="button-row stack-mobile">
+            <button class="primary" onclick="rollAttack('Unarmed Strike', getAttackBonus())">Roll Attack</button>
+            <button class="success" onclick="rollDamage('Unarmed Strike', 4, getDexMod())">Roll Damage</button>
+          </div>
+        </div>
+
+        <div class="attack">
+          <div>
+            <div class="attack-name">Dart</div>
+            <div class="attack-sub" id="dartText">Attack +5 • Damage 1d4+3</div>
+          </div>
+          <div class="button-row stack-mobile">
+            <button class="primary" onclick="rollAttack('Dart', getAttackBonus())">Roll Attack</button>
+            <button class="success" onclick="rollDamage('Dart', 4, getDexMod())">Roll Damage</button>
+          </div>
+        </div>
+
+        <div class="attack">
+          <div>
+            <div class="attack-name">Flurry of Blows</div>
+            <div class="attack-sub">Two unarmed strikes after Attack action</div>
+          </div>
+          <div class="button-row stack-mobile">
+            <button class="warning" onclick="rollFlurry()">Roll Flurry</button>
+          </div>
+        </div>
+
+        <div class="result-box" id="diceResult">
+          <div class="result-big">Ready to roll</div>
+          <div class="result-small">Tap any attack or damage button to roll dice.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Enemy Tracker</h3>
+        <div class="enemy-grid">
+          <input id="enemyName" type="text" placeholder="Enemy name">
+          <input id="enemyHp" type="number" placeholder="HP" min="1">
+          <select id="enemyCondition">
+            <option value="">Condition</option>
+            <option>None</option>
+            <option>Prone</option>
+            <option>Stunned</option>
+            <option>Restrained</option>
+            <option>Grappled</option>
+            <option>Poisoned</option>
+          </select>
+        </div>
+        <div class="button-row">
+          <button class="primary" onclick="addEnemy()">Add Enemy</button>
+          <button class="danger" onclick="clearEnemies()">Clear All</button>
+        </div>
+        <div class="enemy-list" id="enemyList"></div>
+      </div>
+
+      <div class="card">
+        <h3>Rest System</h3>
+        <div class="button-row">
+          <button class="warning" onclick="shortRest()">Short Rest</button>
+          <button class="success" onclick="longRest()">Long Rest</button>
+          <button class="danger" onclick="resetTurn()">Reset Turn</button>
+        </div>
+        <div class="result-box" id="restResult">
+          <div class="result-big">Rest status</div>
+          <div class="result-small">Short Rest restores Ki. Long Rest restores HP, Ki, and resets your turn tracker.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Open Hand Quick Reference</h3>
+        <div class="mini-grid">
+          <div class="stat"><div class="label">Knock Prone</div><div class="value" style="font-size:1rem;" id="proneDc">DEX 12</div></div>
+          <div class="stat"><div class="label">Push 15 ft</div><div class="value" style="font-size:1rem;" id="pushDc">STR 12</div></div>
+          <div class="stat"><div class="label">No Reactions</div><div class="value" style="font-size:1rem;">On hit</div></div>
         </div>
       </div>
     </div>
-    <div class="button-row" style="margin-top:10px;">
-      <button class="warning" onclick="resetStatsOnly()">Reset Stats Only</button>
-    </div>
-    <div class="result-box" id="statResult">
-      <div class="result-big">Stat editor ready</div>
-      <div class="result-small">Changing ability scores updates AC, attack bonus, damage, max HP, and save DC automatically.</div>
-    </div>
+
+    <div class="footer-note">Built for mobile play. Save to your home screen for app-like use.</div>
   </div>
 
-  <div class="card">
-    <h3>Core Stats</h3>
-    <div class="stats">
-      <div class="stat"><div class="label">HP</div><div class="value" id="hp">26</div></div>
-      <div class="stat"><div class="label">Max HP</div><div class="value" id="maxHp">26</div></div>
-      <div class="stat"><div class="label">AC</div><div class="value" id="acDisplay">15</div></div>
-      <div class="stat"><div class="label">Speed</div><div class="value" id="speedDisplay">40 ft</div></div>
-      <div class="stat"><div class="label">Ki Remaining</div><div class="value"><span id="kiRemaining">3</span>/<span id="kiMaxDisplay">3</span></div></div>
-      <div class="stat"><div class="label">Burst Speed</div><div class="value" id="burstSpeedDisplay">80 ft</div></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>HP Tracker</h3>
-    <div class="button-row">
-      <button class="danger" onclick="changeHP(-10)">-10</button>
-      <button class="danger" onclick="changeHP(-5)">-5</button>
-      <button class="danger" onclick="changeHP(-1)">-1</button>
-      <button class="success" onclick="changeHP(1)">+1</button>
-      <button class="success" onclick="changeHP(5)">+5</button>
-      <button class="success" onclick="changeHP(10)">+10</button>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Ki Tracker</h3>
-    <div class="button-row" id="kiButtons"></div>
-    <div class="result-box">
-      <div class="result-small">Tap each Ki point when you spend or recover it.</div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Turn Tracker</h3>
-    <div class="button-row">
-      <button class="toggle" onclick="toggleButton(this)">Attack</button>
-      <button class="toggle" onclick="toggleButton(this)">Bonus Action</button>
-      <button class="toggle" onclick="toggleButton(this)">Reaction</button>
-      <button class="toggle" onclick="toggleButton(this)">Feline Agility</button>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Dice Roller</h3>
-
-    <div class="attack">
-      <div>
-        <div class="attack-name">Quarterstaff</div>
-        <div class="attack-sub" id="quarterstaffText">Attack +5 • Damage 1d8+3</div>
-      </div>
-      <div class="button-row stack-mobile">
-        <button class="primary" onclick="rollAttack('Quarterstaff', getAttackBonus())">Roll Attack</button>
-        <button class="success" onclick="rollDamage('Quarterstaff', 8, getDexMod())">Roll Damage</button>
-      </div>
-    </div>
-
-    <div class="attack">
-      <div>
-        <div class="attack-name">Unarmed Strike</div>
-        <div class="attack-sub" id="unarmedText">Attack +5 • Damage 1d4+3</div>
-      </div>
-      <div class="button-row stack-mobile">
-        <button class="primary" onclick="rollAttack('Unarmed Strike', getAttackBonus())">Roll Attack</button>
-        <button class="success" onclick="rollDamage('Unarmed Strike', 4, getDexMod())">Roll Damage</button>
-      </div>
-    </div>
-
-    <div class="attack">
-      <div>
-        <div class="attack-name">Dart</div>
-        <div class="attack-sub" id="dartText">Attack +5 • Damage 1d4+3</div>
-      </div>
-      <div class="button-row stack-mobile">
-        <button class="primary" onclick="rollAttack('Dart', getAttackBonus())">Roll Attack</button>
-        <button class="success" onclick="rollDamage('Dart', 4, getDexMod())">Roll Damage</button>
-      </div>
-    </div>
-
-    <div class="attack">
-      <div>
-        <div class="attack-name">Flurry of Blows</div>
-        <div class="attack-sub">Two unarmed strikes after Attack action</div>
-      </div>
-      <div class="button-row stack-mobile">
-        <button class="warning" onclick="rollFlurry()">Roll Flurry</button>
-      </div>
-    </div>
-
-    <div class="result-box" id="diceResult">
-      <div class="result-big">Ready to roll</div>
-      <div class="result-small">Tap any attack or damage button to roll dice.</div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Enemy Tracker</h3>
-    <div class="enemy-grid">
-      <input id="enemyName" type="text" placeholder="Enemy name">
-      <input id="enemyHp" type="number" placeholder="HP" min="1">
-      <select id="enemyCondition">
-        <option value="">Condition</option>
-        <option>None</option>
-        <option>Prone</option>
-        <option>Stunned</option>
-        <option>Restrained</option>
-        <option>Grappled</option>
-        <option>Poisoned</option>
-      </select>
-    </div>
-    <div class="button-row">
-      <button class="primary" onclick="addEnemy()">Add Enemy</button>
-      <button class="danger" onclick="clearEnemies()">Clear All</button>
-    </div>
-    <div class="enemy-list" id="enemyList"></div>
-  </div>
-
-  <div class="card">
-    <h3>Rest System</h3>
-    <div class="button-row">
-      <button class="warning" onclick="shortRest()">Short Rest</button>
-      <button class="success" onclick="longRest()">Long Rest</button>
-      <button class="danger" onclick="resetTurn()">Reset Turn</button>
-    </div>
-    <div class="result-box" id="restResult">
-      <div class="result-big">Rest status</div>
-      <div class="result-small">Short Rest restores Ki. Long Rest restores HP, Ki, and resets your turn tracker.</div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Open Hand Quick Reference</h3>
-    <div class="mini-grid">
-      <div class="stat"><div class="label">Knock Prone</div><div class="value" style="font-size:1rem;" id="proneDc">DEX 12</div></div>
-      <div class="stat"><div class="label">Push 15 ft</div><div class="value" style="font-size:1rem;" id="pushDc">STR 12</div></div>
-      <div class="stat"><div class="label">No Reactions</div><div class="value" style="font-size:1rem;">On hit</div></div>
-    </div>
-  </div>
-</div>
-
-<div class="footer-note">Built for mobile play. Save to your home screen for app-like use.</div>
-
-  </div>  <script>
+  <script>
     let level = 3;
     let str = 10;
     let dex = 16;
@@ -624,47 +629,4 @@ button:active {
         filter.Q.value = 2.5;
         gain.gain.setValueAtTime(0.0001, now + i * 0.028);
         gain.gain.exponentialRampToValueAtTime(0.045, now + i * 0.028 + 0.006);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.028 + 0.07);
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(now + i * 0.028);
-        osc.stop(now + i * 0.028 + 0.08);
-      }
-      const thumpOsc = audioCtx.createOscillator();
-      const thumpGain = audioCtx.createGain();
-      thumpOsc.type = 'sine';
-      thumpOsc.frequency.setValueAtTime(120, now + 0.18);
-      thumpOsc.frequency.exponentialRampToValueAtTime(60, now + 0.28);
-      thumpGain.gain.setValueAtTime(0.0001, now + 0.18);
-      thumpGain.gain.exponentialRampToValueAtTime(0.05, now + 0.19);
-      thumpGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.31);
-      thumpOsc.connect(thumpGain);
-      thumpGain.connect(audioCtx.destination);
-      thumpOsc.start(now + 0.18);
-      thumpOsc.stop(now + 0.31);
-    }
-
-    function renderKiButtons() {
-      const container = document.getElementById('kiButtons');
-      const kiMax = getKiMax();
-      if (kiUsed.length !== kiMax) kiUsed = Array(kiMax).fill(false);
-      container.innerHTML = '';
-      for (let i = 0; i < kiMax; i++) {
-        const btn = document.createElement('button');
-        btn.id = 'ki' + (i + 1);
-        btn.className = 'ki-btn warning';
-        btn.textContent = kiUsed[i] ? 'Used' : 'Ki ' + (i + 1);
-        if (kiUsed[i]) btn.classList.add('used');
-        btn.onclick = () => toggleKi(i + 1);
-        container.appendChild(btn);
-      }
-      updateKiDisplay();
-    }
-
-    function updateStatEditorUI() {
-      document.getElementById('strScore').textContent = str;
-      document.getElementById('dexScore').textContent = dex;
-      document.getElementById('conScore').textContent = con;
-      document.getElementById('intScore').textContent = intStat;
-      document.getElementById('wisScore').textC
+        gain.gain.exponenti
