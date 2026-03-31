@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Indominuz</title>
+  <meta name="theme-color" content="#0f172a" />
+  <style>
+    :root{
+      --bg1:#020617;
+      --bg2:#0f172a;
+      --card:#111827;
+      --card2:#1e293b;
+      --line:rgba(255,255,255,.08);
+      --text:#f8fafc;
+      --muted:#94a3b8;
+      --blue:#38bdf8;
+      --blue2:#2563eb;
+      --green:#22c55e;
+      --amber:#f59e0b;
+      --red:#ef4444;
+      --violet:#8b5cf6;
+      --shadow:0 18px 40px rgba(0,0,0,.35);
+      --radius:20px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family:Arial, Helvetica, sans-serif;
+      color:var(--text);
+      min-height:100vh;
+      background:
+        radial-gradient(circle at top, rgba(56,189,248,.18), transparent 28%),
+        linear-gradient(180deg,var(--bg1),var(--bg2));
+      padding:14px;
+    }
+
+    .wrap{max-width:900px;margin:0 auto}
+    .hero,.card{
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      background:linear-gradient(180deg, rgba(17,24,39,.96), rgba(15,23,42,.96));
+    }
+
+    .hero{
+      padding:18px;
+      margin-bottom:14px;
+      background:
+        radial-gradient(circle at top right, rgba(56,189,248,.18), transparent 25%),
+        linear-gradient(135deg, rgba(37,99,235,.16), rgba(139,92,246,.12));
+    }
+
+    .title{font-size:2rem;font-weight:800;margin:0}
+    .subtitle{margin-top:4px;color:var(--muted)}
+    .grid{display:grid;gap:12px}
+    .card{padding:14px}
+    .card h3{margin:0 0 12px 0;font-size:1.05rem}
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:10px;
+    }
+
+    .stat{
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.05);
+      border-radius:16px;
+      padding:10px;
+    }
+
+    .label{font-size:.8rem;color:var(--muted);margin-bottom:4px}
+    .value{font-size:1.35rem;font-weight:800}
+
+    .button-row{display:flex;flex-wrap:wrap;gap:8px}
+    .stack > *{width:100%}
+    button, input, select, textarea{
+      border:none;
+      border-radius:14px;
+      padding:11px 13px;
+      font-size:.98rem;
+      box-shadow:var(--shadow);
+      outline:none;
+    }
+
+    button{
+      cursor:pointer;
+      color:white;
+      font-weight:700;
+      background:#334155;
+      transition:.15s ease;
+    }
+
+    button:active{transform:scale(.98)}
+    .primary{background:linear-gradient(135deg,var(--blue2),var(--blue))}
+    .success{background:linear-gradient(135deg,#16a34a,var(--green))}
+    .warning{background:linear-gradient(135deg,#d97706,var(--amber))}
+    .danger{background:linear-gradient(135deg,#dc2626,var(--red))}
+    .violet{background:linear-gradient(135deg,#7c3aed,var(--violet))}
+    .ghost{background:#334155}
+
+    input, select, textarea{
+      width:100%;
+      background:rgba(255,255,255,.08);
+      color:white;
+    }
+
+    textarea{min-height:100px;resize:vertical}
+    input::placeholder, textarea::placeholder{color:#cbd5e1}
+
+    .section-grid{
+      display:grid;
+      gap:12px;
+      grid-template-columns:1fr;
+    }
+
+    .result-box{
+      margin-top:10px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:16px;
+      padding:12px;
+    }
+
+    .result-big{font-size:1.2rem;font-weight:800;margin-bottom:4px}
+    .result-small{font-size:.93rem;color:var(--muted);line-height:1.4}
+
+    .attack{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding:10px 0;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+
+    .attack:last-child{border-bottom:none}
+    .attack-name{font-weight:800}
+    .attack-sub{font-size:.86rem;color:var(--muted);margin-top:3px}
+
+    .enemy-list,.log-list{display:grid;gap:10px}
+    .enemy-card,.log-entry{
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:16px;
+      padding:12px;
+    }
+
+    .enemy-top{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      margin-bottom:8px;
+    }
+
+    .pill{
+      display:inline-block;
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:.8rem;
+      margin:4px 6px 0 0;
+      background:rgba(255,255,255,.08);
+      color:#e5e7eb;
+    }
+
+    .healthy{background:rgba(34,197,94,.15);color:#86efac}
+    .bloodied{background:rgba(245,158,11,.15);color:#fcd34d}
+    .critical{background:rgba(239,68,68,.15);color:#fca5a5}
+    .defeated{background:rgba(127,29,29,.25);color:#fecaca}
+
+    .tabs{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:8px;
+      margin-bottom:12px;
+    }
+
+    .tab-btn.active{background:linear-gradient(135deg,var(--blue2),var(--blue))}
+    .tab-panel{display:none}
+    .tab-panel.active{display:block}
+
+    .two-col{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .three-col{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+    }
+
+    .mini-note{
+      color:var(--muted);
+      font-size:.85rem;
+      line-height:1.4;
+    }
+
+    .footer-note{
+      text-align:center;
+      color:var(--muted);
+      font-size:.85rem;
+      padding:6px 0 18px;
+    }
+
+    @media (max-width: 700px){
+      .tabs{grid-template-columns:repeat(2,1fr)}
+      .two-col,.three-col,.stats{grid-template-columns:1fr}
+      .attack,.enemy-top{flex-direction:column;align-items:stretch}
+      button{width:100%}
+      .title{font-size:1.7rem}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1 class="title">🐾 Indominuz</h1>
+      <div class="subtitle">Level 3 Tabaxi Monk • Way of the Open Hand • Folk Hero</div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab('combat', this)">Combat</button>
+      <button class="tab-btn" onclick="showTab('openhand', this)">Open Hand</button>
+      <button class="tab-btn" onclick="showTab('enemies', this)">Enemies</button>
+      <button class="tab-btn" onclick="showTab('character', this)">Character</button>
+      <button class="tab-btn" onclick="showTab('log', this)">Log</button>
+    </div>
+
+    <div id="combat" class="tab-panel active">
+      <div class="grid">
+        <div class="card">
+          <h3>Core Stats</h3>
+          <div class="stats">
+            <div class="stat"><div class="label">HP</div><div class="value" id="hpDisplay">26</div></div>
+            <div class="stat"><div class="label">Max HP</div><div class="value" id="maxHpDisplay">26</div></div>
+            <div class="stat"><div class="label">AC</div><div class="value" id="acDisplay">15</div></div>
+            <div class="stat"><div class="label">Speed</div><div class="value" id="speedDisplay">40 ft</div></div>
+            <div class="stat"><div class="label">Ki</div><div class="value" id="kiDisplay">3/3</div></div>
+            <div class="stat"><div class="label">Save DC</div><div class="value" id="saveDcDisplay">12</div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Health + Ki</h3>
+          <div class="two-col">
+            <div>
+              <div class="label">Raw HP Input</div>
+              <input id="rawHpInput" type="number" />
+            </div>
+            <div>
+              <div class="label">HP Status</div>
+              <input id="hpStatusText" type="text" readonly />
+            </div>
+          </div>
+          <div class="button-row" style="margin-top:10px">
+            <button class="danger" onclick="changeHP(-10)">-10</button>
+            <button class="danger" onclick="changeHP(-5)">-5</button>
+            <button class="danger" onclick="changeHP(-1)">-1</button>
+            <button class="success" onclick="changeHP(1)">+1</button>
+            <button class="success" onclick="changeHP(5)">+5</button>
+            <button class="success" onclick="changeHP(10)">+10</button>
+          </div>
+          <div class="button-row" style="margin-top:10px">
+            <button class="warning" onclick="spendKi(1)">Spend 1 Ki</button>
+            <button class="success" onclick="restoreKi(1)">Restore 1 Ki</button>
+            <button class="ghost" onclick="restoreAllKi()">Restore All Ki</button>
+          </div>
+          <div class="result-box">
+            <div class="result-small">HP auto-clamps to max. Bloodied and critical thresholds update automatically.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Dice Roller</h3>
+
+          <div class="attack">
+            <div>
+              <div class="attack-name">Quarterstaff</div>
+              <div class="attack-sub" id="quarterstaffText">Attack +5 • Damage 1d8+3</div>
+            </div>
+            <div class="button-row">
+              <button class="primary" onclick="rollAttack('Quarterstaff')">Attack</button>
+              <button class="success" onclick="rollDamage('Quarterstaff', 8)">Damage</button>
+            </div>
+          </div>
+
+          <div class="attack">
+            <div>
+              <div class="attack-name">Unarmed Strike</div>
+              <div class="attack-sub" id="unarmedText">Attack +5 • Damage 1d4+3</div>
+            </div>
+            <div class="button-row">
+              <button class="primary" onclick="rollAttack('Unarmed Strike')">Attack</button>
+              <button class="success" onclick="rollDamage('Unarmed Strike', 4)">Damage</button>
+            </div>
+          </div>
+
+          <div class="attack">
+            <div>
+              <div class="attack-name">Advantage / Disadvantage</div>
+              <div class="attack-sub">Quarterstaff attack with advantage or disadvantage</div>
+            </div>
+            <div class="button-row">
+              <button class="primary" onclick="rollAttack('Quarterstaff', 'adv')">Adv</button>
+              <button class="warning" onclick="rollAttack('Quarterstaff', 'dis')">Dis</button>
+            </div>
+          </div>
+
+          <div class="attack">
+            <div>
+              <div class="attack-name">Flurry of Blows</div>
+              <div class="attack-sub">Spends 1 Ki • Two unarmed strikes</div>
+            </div>
+            <div class="button-row">
+              <button class="violet" onclick="flurryOfBlows()">Flurry</button>
+            </div>
+          </div>
+
+          <div class="result-box" id="diceResult">
+            <div class="result-big">Ready to roll</div>
+            <div class="result-small">Tap attack or damage to roll.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Turn Flow</h3>
+          <div class="button-row">
+            <button id="actionBtn" class="ghost" onclick="toggleFlow('actionUsed', this)">Action</button>
+            <button id="bonusBtn" class="ghost" onclick="toggleFlow('bonusUsed', this)">Bonus Action</button>
+            <button id="reactionBtn" class="ghost" onclick="toggleFlow('reactionUsed', this)">Reaction</button>
+            <button id="felineBtn" class="ghost" onclick="toggleFlow('felineAgilityUsed', this)">Feline Agility</button>
+          </div>
+          <div class="button-row" style="margin-top:10px">
+            <button class="warning" onclick="shortRest()">Short Rest</button>
+            <button class="success" onclick="longRest()">Long Rest</button>
+            <button class="ghost" onclick="resetTurnFlow()">Reset Turn</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="openhand" class="tab-panel">
+      <div class="grid">
+        <div class="card">
+          <h3>Open Hand Control</h3>
+          <div class="two-col">
+            <div>
+              <div class="label">Target</div>
+              <select id="openHandTarget"></select>
+            </div>
+            <div>
+              <div class="label">Effect</div>
+              <select id="openHandEffect">
+                <option>Knock Prone</option>
+                <option>Push 15 ft</option>
+                <option>No Reactions</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="two-col" style="margin-top:10px">
+            <div>
+              <div class="label">Hit Confirmed?</div>
+              <select id="hitConfirmed">
+                <option>No</option>
+                <option>Yes</option>
+              </select>
+            </div>
+            <div>
+              <div class="label">Save Succeeded?</div>
+              <select id="saveSucceeded">
+                <option>No</option>
+                <option>Yes</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="button-row" style="margin-top:10px">
+            <button class="primary" onclick="applyOpenHand()">Apply Open Hand Effect</button>
+          </div>
+
+          <div class="result-box" id="openHandResult">
+            <div class="result-big">Open Hand ready</div>
+            <div class="result-small">Save DC updates from your monk stats automatically.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="enemies" class="tab-panel">
+      <div class="grid">
+        <div class="card">
+          <h3>Add Enemy</h3>
+          <div class="three-col">
+            <input id="enemyName" placeholder="Enemy name" />
+            <input id="enemyHp" type="number" placeholder="HP" />
+            <input id="enemyAc" type="number" placeholder="AC" />
+          </div>
+          <div class="three-col" style="margin-top:10px">
+            <input id="enemyInitMod" type="number" placeholder="Init Mod" />
+            <select id="enemyBehavior">
+              <option>Aggressive</option>
+              <option>Defensive</option>
+              <option>Tactical</option>
+              <option>Fleeing</option>
+            </select>
+            <button class="primary" onclick="addEnemy()">Add Enemy</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Enemy Tracker</h3>
+          <div class="enemy-list" id="enemyList"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="character" class="tab-panel">
+      <div class="grid">
+        <div class="card">
+          <h3>Character Sheet</h3>
+          <div class="three-col">
+            <div><div class="label">Level</div><input id="levelInput" type="number" min="1" max="20" /></div>
+            <div><div class="label">STR</div><input id="strInput" type="number" /></div>
+            <div><div class="label">DEX</div><input id="dexInput" type="number" /></div>
+            <div><div class="label">CON</div><input id="conInput" type="number" /></div>
+            <div><div class="label">INT</div><input id="intInput" type="number" /></div>
+            <div><div class="label">WIS</div><input id="wisInput" type="number" /></div>
+            <div><div class="label">CHA</div><input id="chaInput" type="number" /></div>
+            <div><div class="label">Gold</div><input id="goldInput" type="number" /></div>
+            <div><div class="label">XP</div><input id="xpInput" type="number" /></div>
+          </div>
+          <div class="button-row" style="margin-top:10px">
+            <button class="success" onclick="saveCharacterInputs()">Save Stats</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Notes</h3>
+          <textarea id="notesInput" placeholder="Campaign notes..."></textarea>
+          <div class="button-row" style="margin-top:10px">
+            <button class="success" onclick="saveNotes()">Save Notes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="log" class="tab-panel">
+      <div class="grid">
+        <div class="card">
+          <h3>Combat Log</h3>
+          <div class="button-row" style="margin-bottom:10px">
+            <button class="ghost" onclick="clearLog()">Clear Log</button>
+          </div>
+          <div class="log-list" id="logList"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-note">Indominuz tracker • auto-saves on this device</div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "indominuz-full-tracker-v1";
+
+    const defaultState = {
+      character: {
+        name: "Indominuz",
+        level: 3,
+        str: 10,
+        dex: 16,
+        con: 14,
+        intStat: 8,
+        wis: 15,
+        cha: 10,
+        rawHp: 26,
+        kiSpent: 0,
+        gold: 50,
+        xp: 900,
+        actionUsed: false,
+        bonusUsed: false,
+        reactionUsed: false,
+        felineAgilityUsed: false,
+        notes: "Mystic blue aura surrounds Indominuz in battle."
+      },
+      enemies: [],
+      log: ["Indominuz enters combat."],
+      openHand: {
+        targetId: null,
+        effect: "Knock Prone",
+        hitConfirmed: "No",
+        saveSucceeded: "No"
+      }
+    };
+
+    let state = loadState();
+
+    function loadState(){
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if(saved) return JSON.parse(saved);
+      } catch(e){}
+      return JSON.parse(JSON.stringify(defaultState));
+    }
+
+    function saveState(){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function showTab(id, btn){
+      document.querySelectorAll(".tab-panel").forEach(el => el.classList.remove("active"));
+      document.querySelectorAll(".tab-btn").forEach(el => el.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+      btn.classList.add("active");
+    }
+
+    function getMod(score){
+      return Math.floor((score - 10) / 2);
+    }
+
+    function profBonus(level){
+      if(level >= 17) return 6;
+      if(level >= 13) return 5;
+      if(level >= 9) return 4;
+      if(level >= 5) return 3;
+      return 2;
+    }
+
+    function attackBonus(){
+      return getMod(state.character.dex) + profBonus(state.character.level);
+    }
+
+    function maxHp(){
+      const conMod = getMod(state.character.con);
+      return Math.max(1, 8 + conMod + (state.character.level - 1) * (5 + conMod));
+    }
+
+    function currentHp(){
+      return Math.max(0, Math.min(state.character.rawHp, maxHp()));
+    }
+
+    function hpStatus(){
+      const hp = currentHp();
+      const max = maxHp();
+      if(hp <= 0) return "Down";
+      if(hp <= Math.ceil(max * 0.25)) return "Critical";
+      if(hp <= Math.ceil(max * 0.5)) return "Bloodied";
+      return "Healthy";
+    }
+
+    function saveDc(){
+      return 8 + profBonus(state.character.level) + getMod(state.character.wis);
+    }
+
+    function armorClass(){
+      return 10 + getMod(state.character.dex) + getMod(state.character.wis);
+    }
+
+    function speed(){
+      let s = 30;
+      if(state.character.level >= 2) s += 10;
+      if(state.character.level >= 6) s += 5;
+      if(state.character.level >= 10) s += 5;
+      if(state.character.level >= 14) s += 5;
+      if(state.character.level >= 18) s += 5;
+      return s;
+    }
+
+    function kiMax(){
+      return state.character.level >= 2 ? state.character.level : 0;
+    }
+
+    function kiCurrent(){
+      return Math.max(0, kiMax() - state.character.kiSpent);
+    }
+
+    function rollDie(sides){
+      return Math.floor(Math.random() * sides) + 1;
+    }
+
+    function addLog(text){
+      const time = new Date().toLocaleTimeString([], {hour:"numeric", minute:"2-digit"});
+      state.log.unshift(`${time} • ${text}`);
+      state.log = state.log.slice(0, 120);
+      saveState();
+      renderLog();
+    }
+
+    function changeHP(amount){
+      state.character.rawHp += amount;
+      saveState();
+      renderAll();
+    }
+
+    function spendKi(n){
+      state.character.kiSpent = Math.min(kiMax(), state.character.kiSpent + n);
+      saveState();
+      renderAll();
+    }
+
+    function restoreKi(n){
+      state.character.kiSpent = Math.max(0, state.character.kiSpent - n);
+      saveState();
+      renderAll();
+    }
+
+    function restoreAllKi(){
+      state.character.kiSpent = 0;
+      saveState();
+      renderAll();
+    }
+
+    function toggleFlow(key, btn){
+      state.character[key] = !state.character[key];
+      btn.classList.toggle
