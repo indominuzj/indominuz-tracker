@@ -267,6 +267,12 @@ input, select{
       </div>
 
       <div>
+        <div class="label">Gold</div>
+        <input id="goldInput" type="number" min="0">
+      </div>
+      <div></div>
+
+      <div>
         <div class="stat-label-row">
           <div class="label">STR</div>
           <div class="mod-badge" id="strModBadge">+0</div>
@@ -368,7 +374,7 @@ input, select{
 <script>
 document.addEventListener("DOMContentLoaded", function(){
 
-const STORAGE_KEY = "indominuz_full_safe_build_v1";
+const STORAGE_KEY = "indominuz_full_safe_build_v2";
 
 const defaultState = {
   hp: 24,
@@ -582,6 +588,7 @@ function saveStats(){
   state.wis = clamp(Number(document.getElementById("wisInput").value || 15), 1, 20);
   state.cha = clamp(Number(document.getElementById("chaInput").value || 10), 1, 20);
   state.hp = clamp(Number(document.getElementById("currentHpInput").value || state.hp), 0, maxHp());
+  state.gold = clamp(Number(document.getElementById("goldInput").value || state.gold), 0, 999999);
 
   if(state.kiSpent > kiMax()) state.kiSpent = kiMax();
 
@@ -607,6 +614,7 @@ function formatMod(n){
 function renderInputs(){
   document.getElementById("levelInput").value = state.level;
   document.getElementById("currentHpInput").value = state.hp;
+  document.getElementById("goldInput").value = state.gold;
   document.getElementById("strInput").value = state.str;
   document.getElementById("dexInput").value = state.dex;
   document.getElementById("conInput").value = state.con;
