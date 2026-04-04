@@ -15,6 +15,7 @@
   --green:#22c55e;
   --red:#ef4444;
   --amber:#f59e0b;
+  --violet:#8b5cf6;
   --shadow:0 12px 28px rgba(0,0,0,.28);
   --radius:18px;
 }
@@ -28,7 +29,7 @@ body{
     linear-gradient(180deg,#08111f,var(--bg));
   color:var(--text);
 }
-.app{max-width:900px;margin:0 auto}
+.app{max-width:950px;margin:0 auto}
 .card{
   background:linear-gradient(180deg,var(--panel),var(--panel2));
   border:1px solid var(--line);
@@ -37,20 +38,12 @@ body{
   margin-bottom:12px;
   box-shadow:var(--shadow);
 }
-.hero{
-  padding:18px;
-}
-.hero h1{
-  margin:0 0 4px 0;
-  font-size:2rem;
-}
-.subtitle{
-  color:var(--muted);
-  font-size:.95rem;
-}
+.hero{padding:18px}
+.hero h1{margin:0 0 4px 0;font-size:2rem}
+.subtitle{color:var(--muted);font-size:.95rem}
 .stats-top{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:repeat(4,1fr);
   gap:10px;
   margin-top:14px;
 }
@@ -85,12 +78,13 @@ button:active{transform:scale(.98)}
 .success{background:linear-gradient(135deg,#16a34a,var(--green))}
 .danger{background:linear-gradient(135deg,#dc2626,var(--red))}
 .warning{background:linear-gradient(135deg,#d97706,var(--amber))}
+.violet{background:linear-gradient(135deg,#7c3aed,var(--violet))}
 .button-row{
   display:flex;
   flex-wrap:wrap;
   gap:8px;
 }
-input{
+input, select{
   width:100%;
   padding:12px;
   border:none;
@@ -104,13 +98,14 @@ input{
   grid-template-columns:1fr 1fr;
   gap:12px;
 }
+.grid-3{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
 .section-title{
   margin:0 0 12px 0;
   font-size:1.5rem;
-}
-.muted{
-  color:var(--muted);
-  font-size:.92rem;
 }
 .log{
   display:grid;
@@ -144,8 +139,25 @@ input{
   font-size:.85rem;
   font-weight:800;
 }
+.ability-card{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:14px;
+  padding:12px;
+}
+.ability-name{
+  font-weight:800;
+  font-size:1rem;
+  margin-bottom:4px;
+}
+.ability-desc{
+  color:var(--muted);
+  font-size:.9rem;
+  line-height:1.4;
+  margin-bottom:10px;
+}
 @media (max-width:700px){
-  .stats-top,.grid-2{grid-template-columns:1fr}
+  .stats-top,.grid-2,.grid-3{grid-template-columns:1fr}
   button{width:100%;margin:0}
   .button-row{display:grid}
 }
@@ -171,6 +183,10 @@ input{
         <div class="label">Level</div>
         <div class="value" id="levelText">3</div>
       </div>
+      <div class="statbox">
+        <div class="label">Save DC</div>
+        <div class="value" id="saveDcTop">12</div>
+      </div>
     </div>
   </div>
 
@@ -182,7 +198,55 @@ input{
       <button onclick="useKi()" class="warning">Use Ki</button>
       <button onclick="restoreKi()" class="success">Restore Ki</button>
       <button onclick="attack()" class="primary">Attack</button>
-      <button onclick="flurry()">Flurry</button>
+      <button onclick="flurry()" class="violet">Flurry</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Monk Abilities Panel</h2>
+    <div class="grid-2">
+      <div class="ability-card">
+        <div class="ability-name">Martial Arts</div>
+        <div class="ability-desc">Use DEX for monk weapons and unarmed strikes. Bonus action unarmed strike after attacking.</div>
+        <button onclick="useMartialArts()" class="primary">Use Martial Arts</button>
+      </div>
+
+      <div class="ability-card">
+        <div class="ability-name">Flurry of Blows</div>
+        <div class="ability-desc">Spend 1 Ki to make two unarmed strikes as a bonus action.</div>
+        <button onclick="flurry()" class="violet">Use Flurry</button>
+      </div>
+
+      <div class="ability-card">
+        <div class="ability-name">Patient Defense</div>
+        <div class="ability-desc">Spend 1 Ki to take the Dodge action as a bonus action.</div>
+        <button onclick="patientDefense()" class="warning">Use Patient Defense</button>
+      </div>
+
+      <div class="ability-card">
+        <div class="ability-name">Step of the Wind</div>
+        <div class="ability-desc">Spend 1 Ki to Dash or Disengage as a bonus action. Jump distance doubles.</div>
+        <button onclick="stepOfTheWind()" class="warning">Use Step of the Wind</button>
+      </div>
+
+      <div class="ability-card">
+        <div class="ability-name">Feline Agility</div>
+        <div class="ability-desc">Double your speed for the turn. You can’t use it again until you move 0 feet on one of your turns.</div>
+        <button onclick="felineAgility()" class="success">Use Feline Agility</button>
+      </div>
+
+      <div class="ability-card">
+        <div class="ability-name">Open Hand Technique</div>
+        <div class="ability-desc">When Flurry hits, you can knock prone, push 15 ft, or stop reactions. Save DC uses your monk save DC.</div>
+        <div class="button-row">
+          <select id="openHandSelect">
+            <option value="Knock Prone">Knock Prone</option>
+            <option value="Push 15 ft">Push 15 ft</option>
+            <option value="No Reactions">No Reactions</option>
+          </select>
+          <button onclick="openHandTechnique()" class="primary">Apply Open Hand</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -269,7 +333,7 @@ input{
 <script>
 document.addEventListener("DOMContentLoaded", function(){
 
-const STORAGE_KEY = "indominuz_clean_ui_v2";
+const STORAGE_KEY = "indominuz_clean_ui_v3";
 
 const defaultState = {
   hp: 24,
@@ -281,7 +345,8 @@ const defaultState = {
   wis: 15,
   cha: 10,
   kiSpent: 0,
-  logs: []
+  logs: [],
+  felineUsed: false
 };
 
 function load(){
@@ -332,13 +397,17 @@ function saveDc(){
   return 8 + profBonus() + mod(state.wis);
 }
 
+function speed(){
+  return state.felineUsed ? 80 : 40;
+}
+
 function clamp(value, min, max){
   return Math.max(min, Math.min(max, value));
 }
 
 function log(text){
   state.logs.unshift(text);
-  state.logs = state.logs.slice(0, 12);
+  state.logs = state.logs.slice(0, 14);
 }
 
 function hpChange(n){
@@ -357,6 +426,18 @@ function useKi(){
   state.kiSpent++;
   log("Used 1 Ki");
   render();
+}
+
+function spendKiForAbility(name){
+  if(kiCurrent() <= 0){
+    log("No Ki for " + name);
+    render();
+    return false;
+  }
+  state.kiSpent++;
+  log(name + " used (1 Ki)");
+  render();
+  return true;
 }
 
 function restoreKi(){
@@ -386,6 +467,36 @@ function flurry(){
   const dmg1 = Math.floor(Math.random() * 4) + 1 + mod(state.dex);
   const dmg2 = Math.floor(Math.random() * 4) + 1 + mod(state.dex);
   log("Flurry: " + dmg1 + " and " + dmg2 + " damage");
+  render();
+}
+
+function useMartialArts(){
+  const dmg = Math.floor(Math.random() * 4) + 1 + mod(state.dex);
+  log("Martial Arts bonus strike: " + dmg + " damage");
+  render();
+}
+
+function patientDefense(){
+  if(!spendKiForAbility("Patient Defense")) return;
+  log("You take the Dodge action as a bonus action");
+  render();
+}
+
+function stepOfTheWind(){
+  if(!spendKiForAbility("Step of the Wind")) return;
+  log("Dash/Disengage as bonus action • jump distance doubled");
+  render();
+}
+
+function felineAgility(){
+  state.felineUsed = !state.felineUsed;
+  log(state.felineUsed ? "Feline Agility active • speed doubled" : "Feline Agility reset");
+  render();
+}
+
+function openHandTechnique(){
+  const effect = document.getElementById("openHandSelect").value;
+  log("Open Hand Technique: " + effect + " • Save DC " + saveDc());
   render();
 }
 
@@ -435,6 +546,7 @@ function render(){
   document.getElementById("hp").textContent = state.hp + "/" + maxHp();
   document.getElementById("ki").textContent = kiCurrent() + "/" + kiMax();
   document.getElementById("levelText").textContent = state.level;
+  document.getElementById("saveDcTop").textContent = saveDc();
 
   document.getElementById("derivedStats").innerHTML =
     "Attack Bonus: +" + attackBonus() +
@@ -443,7 +555,8 @@ function render(){
     "<br>Proficiency Bonus: +" + profBonus() +
     "<br>DEX Mod: " + formatMod(mod(state.dex)) +
     "<br>WIS Mod: " + formatMod(mod(state.wis)) +
-    "<br>CON Mod: " + formatMod(mod(state.con));
+    "<br>CON Mod: " + formatMod(mod(state.con)) +
+    "<br>Speed: " + speed() + " ft";
 
   document.getElementById("log").innerHTML =
     state.logs.map(x => "<div>" + x + "</div>").join("");
@@ -459,6 +572,11 @@ window.useKi = useKi;
 window.restoreKi = restoreKi;
 window.attack = attack;
 window.flurry = flurry;
+window.useMartialArts = useMartialArts;
+window.patientDefense = patientDefense;
+window.stepOfTheWind = stepOfTheWind;
+window.felineAgility = felineAgility;
+window.openHandTechnique = openHandTechnique;
 
 render();
 
