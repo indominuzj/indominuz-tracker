@@ -29,7 +29,7 @@ body{
     linear-gradient(180deg,#08111f,var(--bg));
   color:var(--text);
 }
-.app{max-width:1000px;margin:0 auto}
+.app{max-width:1100px;margin:0 auto}
 .card{
   background:linear-gradient(180deg,var(--panel),var(--panel2));
   border:1px solid var(--line);
@@ -84,7 +84,7 @@ button:active{transform:scale(.98)}
   flex-wrap:wrap;
   gap:8px;
 }
-input, select{
+input, select, textarea{
   width:100%;
   padding:12px;
   border:none;
@@ -92,6 +92,10 @@ input, select{
   background:#334155;
   color:white;
   font-size:1rem;
+}
+textarea{
+  min-height:90px;
+  resize:vertical;
 }
 .grid-2{
   display:grid;
@@ -156,8 +160,51 @@ input, select{
   line-height:1.4;
   margin-bottom:10px;
 }
-@media (max-width:700px){
-  .stats-top,.grid-2,.grid-3{grid-template-columns:1fr}
+.inventory-grid{
+  display:grid;
+  grid-template-columns:1.1fr .7fr .7fr .7fr;
+  gap:12px;
+}
+.inventory-list{
+  display:grid;
+  gap:10px;
+}
+.item-card{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:14px;
+  padding:12px;
+}
+.item-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+}
+.item-name{
+  font-weight:800;
+  font-size:1rem;
+}
+.item-sub{
+  color:var(--muted);
+  font-size:.9rem;
+  margin-top:4px;
+}
+.item-notes{
+  color:#e2e8f0;
+  font-size:.9rem;
+  margin-top:8px;
+}
+.pill{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:999px;
+  background:rgba(255,255,255,.08);
+  font-size:.8rem;
+  margin:6px 6px 0 0;
+}
+@media (max-width:800px){
+  .stats-top,.grid-2,.grid-3,.inventory-grid{grid-template-columns:1fr}
   button{width:100%;margin:0}
   .button-row{display:grid}
 }
@@ -357,6 +404,52 @@ input, select{
     <div id="shopStatus" style="margin-top:12px" class="derived"></div>
   </div>
 
+  <div class="card">
+    <h2 class="section-title">Upgraded Inventory</h2>
+
+    <div class="inventory-grid">
+      <div>
+        <div class="label">Item Name</div>
+        <input id="itemNameInput" type="text" placeholder="Quarterstaff">
+      </div>
+      <div>
+        <div class="label">Quantity</div>
+        <input id="itemQtyInput" type="number" min="1" value="1">
+      </div>
+      <div>
+        <div class="label">Category</div>
+        <select id="itemCategoryInput">
+          <option>Weapon</option>
+          <option>Armor</option>
+          <option>Gear</option>
+          <option>Consumable</option>
+          <option>Tool</option>
+          <option>Treasure</option>
+          <option>Quest</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div>
+        <div class="label">Weight (each)</div>
+        <input id="itemWeightInput" type="number" min="0" step="0.1" value="0">
+      </div>
+    </div>
+
+    <div style="margin-top:12px">
+      <div class="label">Notes</div>
+      <textarea id="itemNotesInput" placeholder="Magic item details, charges, special notes..."></textarea>
+    </div>
+
+    <div class="button-row" style="margin-top:12px">
+      <button onclick="addInventoryItem()" class="success">Add Item</button>
+      <button onclick="clearInventory()" class="danger">Clear Inventory</button>
+    </div>
+
+    <div class="derived" id="inventorySummary" style="margin-top:12px"></div>
+
+    <div class="inventory-list" id="inventoryList" style="margin-top:12px"></div>
+  </div>
+
   <div class="grid-2">
     <div class="card">
       <h2 class="section-title">Derived Stats</h2>
@@ -374,7 +467,7 @@ input, select{
 <script>
 document.addEventListener("DOMContentLoaded", function(){
 
-const STORAGE_KEY = "indominuz_full_safe_build_v2";
+const STORAGE_KEY = "indominuz_full_safe_build_v3";
 
 const defaultState = {
   hp: 24,
@@ -388,14 +481,19 @@ const defaultState = {
   gold: 50,
   kiSpent: 0,
   logs: [],
-  felineUsed: false
+  felineUsed: false,
+  inventory: []
 };
 
 function load(){
   try{
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
     if(!saved) return {...defaultState};
-    return {...defaultState, ...saved};
+    return {
+      ...defaultState,
+      ...saved,
+      inventory: Array.isArray(saved.inventory) ? saved.inventory : []
+    };
   }catch(e){
     return {...defaultState};
   }
@@ -450,6 +548,12 @@ function clamp(value, min, max){
 function log(text){
   state.logs.unshift(text);
   state.logs = state.logs.slice(0, 14);
+}
+
+function totalCarryWeight(){
+  return state.inventory.reduce((sum, item) => {
+    return sum + ((Number(item.qty) || 0) * (Number(item.weight) || 0));
+  }, 0);
 }
 
 function hpChange(n){
@@ -542,6 +646,27 @@ function openHandTechnique(){
   render();
 }
 
+function addOrStackInventoryItem(name, qty, category, weight, notes){
+  const existing = state.inventory.find(item =>
+    item.name.toLowerCase() === name.toLowerCase() &&
+    item.category === category &&
+    Number(item.weight) === Number(weight) &&
+    (item.notes || "") === (notes || "")
+  );
+
+  if(existing){
+    existing.qty += qty;
+  } else {
+    state.inventory.push({
+      name,
+      qty,
+      category,
+      weight,
+      notes
+    });
+  }
+}
+
 function processPurchase(name, cost){
   if(cost < 0){
     document.getElementById("shopStatus").innerHTML = "Cost cannot be negative.";
@@ -557,9 +682,10 @@ function processPurchase(name, cost){
   }
 
   state.gold -= cost;
+  addOrStackInventoryItem(name, 1, "Purchased", 0, "");
   log("Bought " + name + " for " + cost + "g");
   document.getElementById("shopStatus").innerHTML =
-    "Purchased <strong>" + name + "</strong> for " + cost + "g.";
+    "Purchased <strong>" + name + "</strong> for " + cost + "g and added it to inventory.";
   render();
 }
 
@@ -579,104 +705,57 @@ function buyCustomItem(){
   processPurchase(name, cost);
 }
 
+function addInventoryItem(){
+  const name = document.getElementById("itemNameInput").value.trim();
+  const qty = clamp(Number(document.getElementById("itemQtyInput").value || 1), 1, 999);
+  const category = document.getElementById("itemCategoryInput").value;
+  const weight = clamp(Number(document.getElementById("itemWeightInput").value || 0), 0, 9999);
+  const notes = document.getElementById("itemNotesInput").value.trim();
+
+  if(!name){
+    log("Enter an item name first");
+    render();
+    return;
+  }
+
+  addOrStackInventoryItem(name, qty, category, weight, notes);
+  log("Added " + qty + " x " + name + " to inventory");
+  document.getElementById("itemNameInput").value = "";
+  document.getElementById("itemQtyInput").value = 1;
+  document.getElementById("itemCategoryInput").value = "Weapon";
+  document.getElementById("itemWeightInput").value = 0;
+  document.getElementById("itemNotesInput").value = "";
+  render();
+}
+
+function removeInventoryItem(index){
+  const item = state.inventory[index];
+  if(item) log("Removed " + item.name + " from inventory");
+  state.inventory.splice(index, 1);
+  render();
+}
+
+function changeInventoryQty(index, delta){
+  const item = state.inventory[index];
+  if(!item) return;
+  item.qty += delta;
+  if(item.qty <= 0){
+    removeInventoryItem(index);
+    return;
+  }
+  render();
+}
+
+function clearInventory(){
+  state.inventory = [];
+  log("Inventory cleared");
+  render();
+}
+
 function saveStats(){
   state.level = clamp(Number(document.getElementById("levelInput").value || 3), 1, 20);
   state.str = clamp(Number(document.getElementById("strInput").value || 10), 1, 20);
   state.dex = clamp(Number(document.getElementById("dexInput").value || 16), 1, 20);
   state.con = clamp(Number(document.getElementById("conInput").value || 14), 1, 20);
   state.intStat = clamp(Number(document.getElementById("intInput").value || 8), 1, 20);
-  state.wis = clamp(Number(document.getElementById("wisInput").value || 15), 1, 20);
-  state.cha = clamp(Number(document.getElementById("chaInput").value || 10), 1, 20);
-  state.hp = clamp(Number(document.getElementById("currentHpInput").value || state.hp), 0, maxHp());
-  state.gold = clamp(Number(document.getElementById("goldInput").value || state.gold), 0, 999999);
-
-  if(state.kiSpent > kiMax()) state.kiSpent = kiMax();
-
-  log("Stats saved");
-
-  const btn = document.getElementById("saveBtn");
-  const status = document.getElementById("saveStatus");
-  btn.style.boxShadow = "0 0 15px #22c55e";
-  status.textContent = "Saved ✓";
-
-  setTimeout(() => {
-    btn.style.boxShadow = "";
-    status.textContent = "";
-  }, 1500);
-
-  render();
-}
-
-function formatMod(n){
-  return n >= 0 ? "+" + n : String(n);
-}
-
-function renderInputs(){
-  document.getElementById("levelInput").value = state.level;
-  document.getElementById("currentHpInput").value = state.hp;
-  document.getElementById("goldInput").value = state.gold;
-  document.getElementById("strInput").value = state.str;
-  document.getElementById("dexInput").value = state.dex;
-  document.getElementById("conInput").value = state.con;
-  document.getElementById("intInput").value = state.intStat;
-  document.getElementById("wisInput").value = state.wis;
-  document.getElementById("chaInput").value = state.cha;
-}
-
-function renderModBadges(){
-  document.getElementById("strModBadge").textContent = formatMod(mod(state.str));
-  document.getElementById("dexModBadge").textContent = formatMod(mod(state.dex));
-  document.getElementById("conModBadge").textContent = formatMod(mod(state.con));
-  document.getElementById("intModBadge").textContent = formatMod(mod(state.intStat));
-  document.getElementById("wisModBadge").textContent = formatMod(mod(state.wis));
-  document.getElementById("chaModBadge").textContent = formatMod(mod(state.cha));
-}
-
-function render(){
-  state.hp = clamp(state.hp, 0, maxHp());
-
-  document.getElementById("hp").textContent = state.hp + "/" + maxHp();
-  document.getElementById("ki").textContent = kiCurrent() + "/" + kiMax();
-  document.getElementById("levelText").textContent = state.level;
-  document.getElementById("saveDcTop").textContent = saveDc();
-  document.getElementById("goldTop").textContent = state.gold;
-
-  document.getElementById("derivedStats").innerHTML =
-    "Attack Bonus: +" + attackBonus() +
-    "<br>Save DC: " + saveDc() +
-    "<br>Max HP: " + maxHp() +
-    "<br>Proficiency Bonus: +" + profBonus() +
-    "<br>DEX Mod: " + formatMod(mod(state.dex)) +
-    "<br>WIS Mod: " + formatMod(mod(state.wis)) +
-    "<br>CON Mod: " + formatMod(mod(state.con)) +
-    "<br>Speed: " + speed() + " ft" +
-    "<br>Gold: " + state.gold;
-
-  document.getElementById("log").innerHTML =
-    state.logs.map(x => "<div>" + x + "</div>").join("");
-
-  renderInputs();
-  renderModBadges();
-  save();
-}
-
-window.saveStats = saveStats;
-window.hpChange = hpChange;
-window.useKi = useKi;
-window.restoreKi = restoreKi;
-window.attack = attack;
-window.flurry = flurry;
-window.useMartialArts = useMartialArts;
-window.patientDefense = patientDefense;
-window.stepOfTheWind = stepOfTheWind;
-window.felineAgility = felineAgility;
-window.openHandTechnique = openHandTechnique;
-window.buyPresetItem = buyPresetItem;
-window.buyCustomItem = buyCustomItem;
-
-render();
-
-});
-</script>
-</body>
-</html>
+  state.wis = clamp(Number(docum
