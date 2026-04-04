@@ -244,12 +244,12 @@ textarea{
   <div class="card">
     <h2 class="section-title">Combat</h2>
     <div class="button-row">
-      <button onclick="hpChange(-5)" class="danger">-5 HP</button>
-      <button onclick="hpChange(5)" class="success">+5 HP</button>
-      <button onclick="useKi()" class="warning">Use Ki</button>
-      <button onclick="restoreKi()" class="success">Restore Ki</button>
-      <button onclick="attack()" class="primary">Attack</button>
-      <button onclick="flurry()" class="violet">Flurry</button>
+      <button id="hpMinus5Btn" class="danger">-5 HP</button>
+      <button id="hpPlus5Btn" class="success">+5 HP</button>
+      <button id="useKiBtn" class="warning">Use Ki</button>
+      <button id="restoreKiBtn" class="success">Restore Ki</button>
+      <button id="attackBtn" class="primary">Attack</button>
+      <button id="flurryBtn" class="violet">Flurry</button>
     </div>
   </div>
 
@@ -259,31 +259,31 @@ textarea{
       <div class="ability-card">
         <div class="ability-name">Martial Arts</div>
         <div class="ability-desc">Bonus action unarmed strike after attacking. Uses DEX for monk attacks.</div>
-        <button onclick="useMartialArts()" class="primary">Use Martial Arts</button>
+        <button id="martialArtsBtn" class="primary">Use Martial Arts</button>
       </div>
 
       <div class="ability-card">
         <div class="ability-name">Flurry of Blows</div>
         <div class="ability-desc">Spend 1 Ki to make two unarmed strikes as a bonus action.</div>
-        <button onclick="flurry()" class="violet">Use Flurry</button>
+        <button id="flurryPanelBtn" class="violet">Use Flurry</button>
       </div>
 
       <div class="ability-card">
         <div class="ability-name">Patient Defense</div>
         <div class="ability-desc">Spend 1 Ki to take the Dodge action as a bonus action.</div>
-        <button onclick="patientDefense()" class="warning">Use Patient Defense</button>
+        <button id="patientDefenseBtn" class="warning">Use Patient Defense</button>
       </div>
 
       <div class="ability-card">
         <div class="ability-name">Step of the Wind</div>
         <div class="ability-desc">Spend 1 Ki to Dash or Disengage as a bonus action. Jump distance doubles.</div>
-        <button onclick="stepOfTheWind()" class="warning">Use Step of the Wind</button>
+        <button id="stepOfWindBtn" class="warning">Use Step of the Wind</button>
       </div>
 
       <div class="ability-card">
         <div class="ability-name">Feline Agility</div>
         <div class="ability-desc">Double your speed for the turn. Reset it after a turn with 0 movement.</div>
-        <button onclick="felineAgility()" class="success">Toggle Feline Agility</button>
+        <button id="felineAgilityBtn" class="success">Toggle Feline Agility</button>
       </div>
 
       <div class="ability-card">
@@ -295,7 +295,7 @@ textarea{
             <option value="Push 15 ft">Push 15 ft</option>
             <option value="No Reactions">No Reactions</option>
           </select>
-          <button onclick="openHandTechnique()" class="primary">Apply Open Hand</button>
+          <button id="openHandBtn" class="primary">Apply Open Hand</button>
         </div>
       </div>
     </div>
@@ -369,7 +369,7 @@ textarea{
     </div>
 
     <div style="margin-top:12px">
-      <button onclick="saveStats()" id="saveBtn" class="success">Save Changes</button>
+      <button id="saveBtn" class="success">Save Changes</button>
       <div id="saveStatus" style="margin-top:6px;font-size:.85rem;color:#22c55e;"></div>
     </div>
   </div>
@@ -389,16 +389,16 @@ textarea{
     </div>
 
     <div style="margin-top:12px" class="button-row">
-      <button onclick="buyCustomItem()" class="success">Buy Item</button>
+      <button id="buyCustomBtn" class="success">Buy Item</button>
     </div>
 
     <div style="margin-top:16px" class="grid-3">
-      <button onclick="buyPresetItem('Healing Potion', 50)" class="primary">Healing Potion — 50g</button>
-      <button onclick="buyPresetItem('Rations', 1)" class="primary">Rations — 1g</button>
-      <button onclick="buyPresetItem('Rope', 1)" class="primary">Rope — 1g</button>
-      <button onclick="buyPresetItem('Torch', 1)" class="primary">Torch — 1g</button>
-      <button onclick="buyPresetItem('Dart', 1)" class="primary">Dart — 1g</button>
-      <button onclick="buyPresetItem('Potion of Climbing', 180)" class="primary">Potion of Climbing — 180g</button>
+      <button class="primary preset-buy" data-name="Healing Potion" data-cost="50">Healing Potion — 50g</button>
+      <button class="primary preset-buy" data-name="Rations" data-cost="1">Rations — 1g</button>
+      <button class="primary preset-buy" data-name="Rope" data-cost="1">Rope — 1g</button>
+      <button class="primary preset-buy" data-name="Torch" data-cost="1">Torch — 1g</button>
+      <button class="primary preset-buy" data-name="Dart" data-cost="1">Dart — 1g</button>
+      <button class="primary preset-buy" data-name="Potion of Climbing" data-cost="180">Potion of Climbing — 180g</button>
     </div>
 
     <div id="shopStatus" style="margin-top:12px" class="derived"></div>
@@ -442,8 +442,8 @@ textarea{
     </div>
 
     <div class="button-row" style="margin-top:12px">
-      <button onclick="addInventoryItem()" class="success">Add Item</button>
-      <button onclick="clearInventory()" class="danger">Clear Inventory</button>
+      <button id="addInventoryBtn" class="success">Add Item</button>
+      <button id="clearInventoryBtn" class="danger">Clear Inventory</button>
     </div>
 
     <div class="derived" id="inventorySummary" style="margin-top:12px"></div>
@@ -466,9 +466,7 @@ textarea{
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function(){
-
-const STORAGE_KEY = "indominuz_full_safe_build_v4";
+const STORAGE_KEY = "indominuz_unbreakable_v1";
 
 const defaultState = {
   hp: 24,
@@ -557,7 +555,7 @@ function clamp(value, min, max){
   return Math.max(min, Math.min(max, value));
 }
 
-function log(text){
+function logEntry(text){
   state.logs.unshift(text);
   state.logs = state.logs.slice(0, 14);
 }
@@ -575,29 +573,29 @@ function totalItemQuantity(){
 function hpChange(n){
   state.hp += n;
   state.hp = clamp(state.hp, 0, maxHp());
-  log("HP " + (n > 0 ? "+" : "") + n);
+  logEntry("HP " + (n > 0 ? "+" : "") + n);
   render();
 }
 
 function useKi(){
   if(kiCurrent() <= 0){
-    log("No Ki left");
+    logEntry("No Ki left");
     render();
     return;
   }
   state.kiSpent++;
-  log("Used 1 Ki");
+  logEntry("Used 1 Ki");
   render();
 }
 
 function spendKiForAbility(name){
   if(kiCurrent() <= 0){
-    log("No Ki for " + name);
+    logEntry("No Ki for " + name);
     render();
     return false;
   }
   state.kiSpent++;
-  log(name + " used (1 Ki)");
+  logEntry(name + " used (1 Ki)");
   render();
   return true;
 }
@@ -605,9 +603,9 @@ function spendKiForAbility(name){
 function restoreKi(){
   if(state.kiSpent > 0){
     state.kiSpent--;
-    log("Restored 1 Ki");
+    logEntry("Restored 1 Ki");
   } else {
-    log("Ki already full");
+    logEntry("Ki already full");
   }
   render();
 }
@@ -615,50 +613,50 @@ function restoreKi(){
 function attack(){
   const roll = Math.floor(Math.random() * 20) + 1;
   const total = roll + attackBonus();
-  log("Attack roll: " + total + " (" + roll + " + " + attackBonus() + ")");
+  logEntry("Attack roll: " + total + " (" + roll + " + " + attackBonus() + ")");
   render();
 }
 
 function flurry(){
   if(kiCurrent() <= 0){
-    log("No Ki for Flurry");
+    logEntry("No Ki for Flurry");
     render();
     return;
   }
   state.kiSpent++;
   const dmg1 = Math.floor(Math.random() * 4) + 1 + mod(state.dex);
   const dmg2 = Math.floor(Math.random() * 4) + 1 + mod(state.dex);
-  log("Flurry: " + dmg1 + " and " + dmg2 + " damage");
+  logEntry("Flurry: " + dmg1 + " and " + dmg2 + " damage");
   render();
 }
 
 function useMartialArts(){
   const dmg = Math.floor(Math.random() * 4) + 1 + mod(state.dex);
-  log("Martial Arts bonus strike: " + dmg + " damage");
+  logEntry("Martial Arts bonus strike: " + dmg + " damage");
   render();
 }
 
 function patientDefense(){
   if(!spendKiForAbility("Patient Defense")) return;
-  log("You take the Dodge action as a bonus action");
+  logEntry("You take the Dodge action as a bonus action");
   render();
 }
 
 function stepOfTheWind(){
   if(!spendKiForAbility("Step of the Wind")) return;
-  log("Dash/Disengage as bonus action • jump distance doubled");
+  logEntry("Dash/Disengage as bonus action • jump distance doubled");
   render();
 }
 
 function felineAgility(){
   state.felineUsed = !state.felineUsed;
-  log(state.felineUsed ? "Feline Agility active • speed doubled" : "Feline Agility reset");
+  logEntry(state.felineUsed ? "Feline Agility active • speed doubled" : "Feline Agility reset");
   render();
 }
 
 function openHandTechnique(){
   const effect = document.getElementById("openHandSelect").value;
-  log("Open Hand Technique: " + effect + " • Save DC " + saveDc());
+  logEntry("Open Hand Technique: " + effect + " • Save DC " + saveDc());
   render();
 }
 
@@ -689,39 +687,36 @@ function addOrStackInventoryItem(name, qty, category, weight, notes){
 }
 
 function processPurchase(name, cost){
+  const shopStatus = document.getElementById("shopStatus");
+
   if(cost < 0){
-    document.getElementById("shopStatus").innerHTML = "Cost cannot be negative.";
+    shopStatus.innerHTML = "Cost cannot be negative.";
     return;
   }
 
   if(state.gold < cost){
-    document.getElementById("shopStatus").innerHTML =
-      "Not enough gold for <strong>" + name + "</strong>.";
-    log("Could not afford " + name + " (" + cost + "g)");
+    shopStatus.innerHTML = "Not enough gold for <strong>" + name + "</strong>.";
+    logEntry("Could not afford " + name + " (" + cost + "g)");
     render();
     return;
   }
 
   state.gold -= cost;
   addOrStackInventoryItem(name, 1, "Purchased", 0, "");
-  log("Bought " + name + " for " + cost + "g");
-  document.getElementById("shopStatus").innerHTML =
-    "Purchased <strong>" + name + "</strong> for " + cost + "g and added it to inventory.";
+  logEntry("Bought " + name + " for " + cost + "g");
+  shopStatus.innerHTML = "Purchased <strong>" + name + "</strong> for " + cost + "g and added it to inventory.";
   document.getElementById("shopItemName").value = "";
   document.getElementById("shopItemCost").value = "";
   render();
 }
 
-function buyPresetItem(name, cost){
-  processPurchase(name, cost);
-}
-
 function buyCustomItem(){
   const name = document.getElementById("shopItemName").value.trim();
   const cost = Number(document.getElementById("shopItemCost").value || 0);
+  const shopStatus = document.getElementById("shopStatus");
 
   if(!name){
-    document.getElementById("shopStatus").innerHTML = "Enter an item name.";
+    shopStatus.innerHTML = "Enter an item name.";
     return;
   }
 
@@ -736,13 +731,13 @@ function addInventoryItem(){
   const notes = document.getElementById("itemNotesInput").value.trim();
 
   if(!name){
-    log("Enter an item name first");
+    logEntry("Enter an item name first");
     render();
     return;
   }
 
   addOrStackInventoryItem(name, qty, category, weight, notes);
-  log("Added " + qty + " x " + name + " to inventory");
+  logEntry("Added " + qty + " x " + name + " to inventory");
   document.getElementById("itemNameInput").value = "";
   document.getElementById("itemQtyInput").value = 1;
   document.getElementById("itemCategoryInput").value = "Weapon";
@@ -753,9 +748,11 @@ function addInventoryItem(){
 
 function removeInventoryItem(index){
   const item = state.inventory[index];
-  if(item) log("Removed " + item.name + " from inventory");
+  if(item) logEntry("Removed " + item.name + " from inventory");
   state.inventory.splice(index, 1);
   render();
 }
 
-function 
+function changeInventoryQty(index, delta){
+  const item = state.inventory[index];
+  if(!item) re
