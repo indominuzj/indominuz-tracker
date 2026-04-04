@@ -356,7 +356,30 @@ input, select{
 
     <div id="shopStatus" style="margin-top:12px" class="derived"></div>
   </div>
+  
+<div class="card">
+  <h2 class="section-title">Inventory</h2>
 
+  <div class="grid-2">
+    <div>
+      <div class="label">Item Name</div>
+      <input id="itemNameInput" type="text" placeholder="Quarterstaff">
+    </div>
+    <div>
+      <div class="label">Quantity</div>
+      <input id="itemQtyInput" type="number" min="1" value="1">
+    </div>
+  </div>
+
+  <div style="margin-top:12px" class="button-row">
+    <button onclick="addInventoryItem()" class="success">Add Item</button>
+    <button onclick="clearInventory()" class="danger">Clear Inventory</button>
+  </div>
+
+  <div id="inventorySummary" style="margin-top:12px" class="derived"></div>
+  <div id="inventoryList" class="log" style="margin-top:12px"></div>
+</div>
+  
   <div class="grid-2">
     <div class="card">
       <h2 class="section-title">Derived Stats</h2>
@@ -388,14 +411,19 @@ const defaultState = {
   gold: 50,
   kiSpent: 0,
   logs: [],
-  felineUsed: false
+  felineUsed: false,
+  inventory: []
 };
 
 function load(){
   try{
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
     if(!saved) return {...defaultState};
-    return {...defaultState, ...saved};
+    return {
+      ...defaultState,
+      ...saved,
+      inventory: Array.isArray(saved.inventory) ? saved.inventory : []
+    };
   }catch(e){
     return {...defaultState};
   }
@@ -579,6 +607,71 @@ function buyCustomItem(){
   processPurchase(name, cost);
 }
 
+function addInventoryItem(){
+  const name = document.getElementById("itemNameInput").value.trim();
+  const qty = clamp(Number(document.getElementById("itemQtyInput").value || 1), 1, 999);
+
+  if(!name){
+    log("Enter an item name first");
+    render();
+    return;
+  }
+
+  const existing = state.inventory.find(
+    item => item.name.toLowerCase() === name.toLowerCase()
+  );
+
+  if(existing){
+    existing.qty += qty;
+  } else {
+    state.inventory.push({ name, qty });
+  }
+
+  log("Added " + qty + " x " + name);
+  document.getElementById("itemNameInput").value = "";
+  document.getElementById("itemQtyInput").value = 1;
+  render();
+}
+
+function removeInventoryItem(index){
+  const item = state.inventory[index];
+  if(item) log("Removed " + item.name);
+  state.inventory.splice(index, 1);
+  render();
+}
+
+function clearInventory(){
+  state.inventory = [];
+  log("Inventory cleared");
+  render();
+}
+
+function renderInventory(){
+  const summary = document.getElementById("inventorySummary");
+  const list = document.getElementById("inventoryList");
+
+  if(!summary || !list) return;
+
+  const totalQty = state.inventory.reduce((sum, item) => sum + item.qty, 0);
+
+  summary.innerHTML =
+    "Unique Items: " + state.inventory.length +
+    "<br>Total Quantity: " + totalQty;
+
+  if(!state.inventory.length){
+    list.innerHTML = "<div>Inventory is empty.</div>";
+    return;
+  }
+
+  list.innerHTML = state.inventory.map((item, index) =>
+    '<div>' +
+      '<strong>' + item.name + '</strong> — Qty: ' + item.qty +
+      '<div style="margin-top:8px;">' +
+        '<button class="danger" onclick="removeInventoryItem(' + index + ')">Remove</button>' +
+      '</div>' +
+    '</div>'
+  ).join("");
+}
 function saveStats(){
   state.level = clamp(Number(document.getElementById("levelInput").value || 3), 1, 20);
   state.str = clamp(Number(document.getElementById("strInput").value || 10), 1, 20);
@@ -657,6 +750,7 @@ function render(){
 
   renderInputs();
   renderModBadges();
+  renderInventory();
   save();
 }
 
@@ -673,6 +767,9 @@ window.felineAgility = felineAgility;
 window.openHandTechnique = openHandTechnique;
 window.buyPresetItem = buyPresetItem;
 window.buyCustomItem = buyCustomItem;
+window.addInventoryItem = addInventoryItem;
+window.removeInventoryItem = removeInventoryItem;
+window.clearInventory = clearInventory;
 
 render();
 
