@@ -104,11 +104,6 @@ input{
   grid-template-columns:1fr 1fr;
   gap:12px;
 }
-.grid-3{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-}
 .section-title{
   margin:0 0 12px 0;
   font-size:1.5rem;
@@ -131,8 +126,26 @@ input{
   line-height:1.65;
   color:#e2e8f0;
 }
+.stat-label-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  margin-bottom:6px;
+}
+.mod-badge{
+  display:inline-block;
+  min-width:44px;
+  text-align:center;
+  padding:4px 8px;
+  border-radius:999px;
+  background:rgba(255,255,255,.08);
+  color:#e2e8f0;
+  font-size:.85rem;
+  font-weight:800;
+}
 @media (max-width:700px){
-  .stats-top,.grid-2,.grid-3{grid-template-columns:1fr}
+  .stats-top,.grid-2{grid-template-columns:1fr}
   button{width:100%;margin:0}
   .button-row{display:grid}
 }
@@ -184,28 +197,52 @@ input{
         <div class="label">Current HP</div>
         <input id="currentHpInput" type="number" min="0">
       </div>
+
       <div>
-        <div class="label">STR</div>
+        <div class="stat-label-row">
+          <div class="label">STR</div>
+          <div class="mod-badge" id="strModBadge">+0</div>
+        </div>
         <input id="strInput" type="number" min="1" max="20">
       </div>
+
       <div>
-        <div class="label">DEX</div>
+        <div class="stat-label-row">
+          <div class="label">DEX</div>
+          <div class="mod-badge" id="dexModBadge">+3</div>
+        </div>
         <input id="dexInput" type="number" min="1" max="20">
       </div>
+
       <div>
-        <div class="label">CON</div>
+        <div class="stat-label-row">
+          <div class="label">CON</div>
+          <div class="mod-badge" id="conModBadge">+2</div>
+        </div>
         <input id="conInput" type="number" min="1" max="20">
       </div>
+
       <div>
-        <div class="label">INT</div>
+        <div class="stat-label-row">
+          <div class="label">INT</div>
+          <div class="mod-badge" id="intModBadge">-1</div>
+        </div>
         <input id="intInput" type="number" min="1" max="20">
       </div>
+
       <div>
-        <div class="label">WIS</div>
+        <div class="stat-label-row">
+          <div class="label">WIS</div>
+          <div class="mod-badge" id="wisModBadge">+2</div>
+        </div>
         <input id="wisInput" type="number" min="1" max="20">
       </div>
+
       <div>
-        <div class="label">CHA</div>
+        <div class="stat-label-row">
+          <div class="label">CHA</div>
+          <div class="mod-badge" id="chaModBadge">+0</div>
+        </div>
         <input id="chaInput" type="number" min="1" max="20">
       </div>
     </div>
@@ -232,7 +269,7 @@ input{
 <script>
 document.addEventListener("DOMContentLoaded", function(){
 
-const STORAGE_KEY = "indominuz_clean_ui_v1";
+const STORAGE_KEY = "indominuz_clean_ui_v2";
 
 const defaultState = {
   hp: 24,
@@ -383,6 +420,15 @@ function renderInputs(){
   document.getElementById("chaInput").value = state.cha;
 }
 
+function renderModBadges(){
+  document.getElementById("strModBadge").textContent = formatMod(mod(state.str));
+  document.getElementById("dexModBadge").textContent = formatMod(mod(state.dex));
+  document.getElementById("conModBadge").textContent = formatMod(mod(state.con));
+  document.getElementById("intModBadge").textContent = formatMod(mod(state.intStat));
+  document.getElementById("wisModBadge").textContent = formatMod(mod(state.wis));
+  document.getElementById("chaModBadge").textContent = formatMod(mod(state.cha));
+}
+
 function render(){
   state.hp = clamp(state.hp, 0, maxHp());
 
@@ -403,6 +449,7 @@ function render(){
     state.logs.map(x => "<div>" + x + "</div>").join("");
 
   renderInputs();
+  renderModBadges();
   save();
 }
 
