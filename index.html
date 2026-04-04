@@ -3,133 +3,239 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Indominuz</title>
-
 <style>
-body{
-  font-family:Arial;
-  background:#0f172a;
-  color:white;
-  padding:10px;
-  margin:0;
+:root{
+  --bg:#0f172a;
+  --panel:#14213d;
+  --panel2:#1e293b;
+  --line:rgba(255,255,255,.08);
+  --text:#f8fafc;
+  --muted:#cbd5e1;
+  --blue:#3b82f6;
+  --green:#22c55e;
+  --red:#ef4444;
+  --amber:#f59e0b;
+  --shadow:0 12px 28px rgba(0,0,0,.28);
+  --radius:18px;
 }
-.card{
-  background:#1e293b;
+*{box-sizing:border-box}
+body{
+  margin:0;
   padding:12px;
-  border-radius:12px;
-  margin-bottom:10px;
+  font-family:Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(circle at top, rgba(59,130,246,.18), transparent 30%),
+    linear-gradient(180deg,#08111f,var(--bg));
+  color:var(--text);
+}
+.app{max-width:900px;margin:0 auto}
+.card{
+  background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:16px;
+  margin-bottom:12px;
+  box-shadow:var(--shadow);
+}
+.hero{
+  padding:18px;
+}
+.hero h1{
+  margin:0 0 4px 0;
+  font-size:2rem;
+}
+.subtitle{
+  color:var(--muted);
+  font-size:.95rem;
+}
+.stats-top{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:14px;
+}
+.statbox{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:14px;
+  padding:12px;
+}
+.label{
+  color:var(--muted);
+  font-size:.82rem;
+  margin-bottom:4px;
+}
+.value{
+  font-size:1.35rem;
+  font-weight:800;
 }
 button{
-  padding:10px;
   border:none;
-  border-radius:10px;
+  border-radius:12px;
+  padding:11px 14px;
   margin:4px;
-  font-weight:bold;
-  background:#334155;
+  font-weight:800;
   color:white;
+  background:#334155;
+  cursor:pointer;
+  box-shadow:var(--shadow);
 }
-.success{background:#22c55e}
-.danger{background:#ef4444}
-.warning{background:#f59e0b}
-.primary{background:#3b82f6}
+button:active{transform:scale(.98)}
+.primary{background:linear-gradient(135deg,#2563eb,var(--blue))}
+.success{background:linear-gradient(135deg,#16a34a,var(--green))}
+.danger{background:linear-gradient(135deg,#dc2626,var(--red))}
+.warning{background:linear-gradient(135deg,#d97706,var(--amber))}
+.button-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
 input{
   width:100%;
-  padding:10px;
-  margin:6px 0;
+  padding:12px;
   border:none;
-  border-radius:10px;
+  border-radius:12px;
   background:#334155;
   color:white;
+  font-size:1rem;
 }
-.grid{
+.grid-2{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:10px;
+  gap:12px;
 }
-.small{
-  color:#cbd5e1;
-  font-size:.9rem;
+.grid-3{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+.section-title{
+  margin:0 0 12px 0;
+  font-size:1.5rem;
+}
+.muted{
+  color:var(--muted);
+  font-size:.92rem;
+}
+.log{
+  display:grid;
+  gap:8px;
+}
+.log div{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:12px;
+  padding:10px;
+}
+.derived{
+  line-height:1.65;
+  color:#e2e8f0;
+}
+@media (max-width:700px){
+  .stats-top,.grid-2,.grid-3{grid-template-columns:1fr}
+  button{width:100%;margin:0}
+  .button-row{display:grid}
 }
 </style>
 </head>
-
 <body>
+<div class="app">
 
-<div class="card">
-  <h2>Indominuz</h2>
-  <div id="hp"></div>
-  <div id="ki"></div>
-  <div id="levelText"></div>
-  <div id="statsSummary"></div>
-</div>
+  <div class="card hero">
+    <h1>🐾 Indominuz</h1>
+    <div class="subtitle">Tabaxi Monk • Clean Safe Build</div>
 
-<div class="card">
-  <h3>HP / Ki Controls</h3>
-  <button onclick="hpChange(-5)" class="danger">-5 HP</button>
-  <button onclick="hpChange(5)" class="success">+5 HP</button>
-  <button onclick="useKi()" class="warning">Use Ki</button>
-  <button onclick="restoreKi()" class="success">Restore Ki</button>
-</div>
-
-<div class="card">
-  <h3>Combat</h3>
-  <button onclick="attack()" class="primary">Attack</button>
-  <button onclick="flurry()">Flurry</button>
-</div>
-
-<div class="card">
-  <h3>Character Stat Points</h3>
-  <div class="grid">
-    <div>
-      <div class="small">Level</div>
-      <input id="levelInput" type="number" min="1" max="20">
-    </div>
-    <div>
-      <div class="small">Current HP</div>
-      <input id="currentHpInput" type="number" min="0">
-    </div>
-    <div>
-      <div class="small">STR</div>
-      <input id="strInput" type="number" min="1" max="20">
-    </div>
-    <div>
-      <div class="small">DEX</div>
-      <input id="dexInput" type="number" min="1" max="20">
-    </div>
-    <div>
-      <div class="small">CON</div>
-      <input id="conInput" type="number" min="1" max="20">
-    </div>
-    <div>
-      <div class="small">INT</div>
-      <input id="intInput" type="number" min="1" max="20">
-    </div>
-    <div>
-      <div class="small">WIS</div>
-      <input id="wisInput" type="number" min="1" max="20">
-    </div>
-    <div>
-      <div class="small">CHA</div>
-      <input id="chaInput" type="number" min="1" max="20">
+    <div class="stats-top">
+      <div class="statbox">
+        <div class="label">HP</div>
+        <div class="value" id="hp">26/24</div>
+      </div>
+      <div class="statbox">
+        <div class="label">Ki</div>
+        <div class="value" id="ki">3/3</div>
+      </div>
+      <div class="statbox">
+        <div class="label">Level</div>
+        <div class="value" id="levelText">3</div>
+      </div>
     </div>
   </div>
 
-  <button onclick="saveStats()" class="success">Save Stats</button>
+  <div class="card">
+    <h2 class="section-title">Combat</h2>
+    <div class="button-row">
+      <button onclick="hpChange(-5)" class="danger">-5 HP</button>
+      <button onclick="hpChange(5)" class="success">+5 HP</button>
+      <button onclick="useKi()" class="warning">Use Ki</button>
+      <button onclick="restoreKi()" class="success">Restore Ki</button>
+      <button onclick="attack()" class="primary">Attack</button>
+      <button onclick="flurry()">Flurry</button>
+    </div>
+  </div>
 
-  <div id="derivedStats" class="small" style="margin-top:8px;"></div>
-</div>
+  <div class="card">
+    <h2 class="section-title">Character Stat Points</h2>
+    <div class="grid-2">
+      <div>
+        <div class="label">Level</div>
+        <input id="levelInput" type="number" min="1" max="20">
+      </div>
+      <div>
+        <div class="label">Current HP</div>
+        <input id="currentHpInput" type="number" min="0">
+      </div>
+      <div>
+        <div class="label">STR</div>
+        <input id="strInput" type="number" min="1" max="20">
+      </div>
+      <div>
+        <div class="label">DEX</div>
+        <input id="dexInput" type="number" min="1" max="20">
+      </div>
+      <div>
+        <div class="label">CON</div>
+        <input id="conInput" type="number" min="1" max="20">
+      </div>
+      <div>
+        <div class="label">INT</div>
+        <input id="intInput" type="number" min="1" max="20">
+      </div>
+      <div>
+        <div class="label">WIS</div>
+        <input id="wisInput" type="number" min="1" max="20">
+      </div>
+      <div>
+        <div class="label">CHA</div>
+        <input id="chaInput" type="number" min="1" max="20">
+      </div>
+    </div>
 
-<div class="card">
-  <h3>Log</h3>
-  <div id="log"></div>
+    <div style="margin-top:12px">
+      <button onclick="saveStats()" class="success">Save Stats</button>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2 class="section-title">Derived Stats</h2>
+      <div id="derivedStats" class="derived"></div>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">Log</h2>
+      <div id="log" class="log"></div>
+    </div>
+  </div>
+
 </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function(){
 
-const STORAGE_KEY = "indominuz_safe_stats_v1";
+const STORAGE_KEY = "indominuz_clean_ui_v1";
 
 const defaultState = {
-  hp: 26,
+  hp: 24,
   level: 3,
   str: 10,
   dex: 16,
@@ -145,10 +251,7 @@ function load(){
   try{
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
     if(!saved) return {...defaultState};
-    return {
-      ...defaultState,
-      ...saved
-    };
+    return {...defaultState, ...saved};
   }catch(e){
     return {...defaultState};
   }
@@ -192,6 +295,10 @@ function saveDc(){
   return 8 + profBonus() + mod(state.wis);
 }
 
+function clamp(value, min, max){
+  return Math.max(min, Math.min(max, value));
+}
+
 function log(text){
   state.logs.unshift(text);
   state.logs = state.logs.slice(0, 12);
@@ -199,8 +306,7 @@ function log(text){
 
 function hpChange(n){
   state.hp += n;
-  if(state.hp < 0) state.hp = 0;
-  if(state.hp > maxHp()) state.hp = maxHp();
+  state.hp = clamp(state.hp, 0, maxHp());
   log("HP " + (n > 0 ? "+" : "") + n);
   render();
 }
@@ -227,8 +333,8 @@ function restoreKi(){
 }
 
 function attack(){
-  let roll = Math.floor(Math.random() * 20) + 1;
-  let total = roll + attackBonus();
+  const roll = Math.floor(Math.random() * 20) + 1;
+  const total = roll + attackBonus();
   log("Attack roll: " + total + " (" + roll + " + " + attackBonus() + ")");
   render();
 }
@@ -240,8 +346,8 @@ function flurry(){
     return;
   }
   state.kiSpent++;
-  let dmg1 = Math.floor(Math.random() * 4) + 1 + mod(state.dex);
-  let dmg2 = Math.floor(Math.random() * 4) + 1 + mod(state.dex);
+  const dmg1 = Math.floor(Math.random() * 4) + 1 + mod(state.dex);
+  const dmg2 = Math.floor(Math.random() * 4) + 1 + mod(state.dex);
   log("Flurry: " + dmg1 + " and " + dmg2 + " damage");
   render();
 }
@@ -256,16 +362,14 @@ function saveStats(){
   state.cha = clamp(Number(document.getElementById("chaInput").value || 10), 1, 20);
   state.hp = clamp(Number(document.getElementById("currentHpInput").value || state.hp), 0, maxHp());
 
-  if(state.kiSpent > kiMax()){
-    state.kiSpent = kiMax();
-  }
+  if(state.kiSpent > kiMax()) state.kiSpent = kiMax();
 
   log("Stats updated");
   render();
 }
 
-function clamp(value, min, max){
-  return Math.max(min, Math.min(max, value));
+function formatMod(n){
+  return n >= 0 ? "+" + n : String(n);
 }
 
 function renderInputs(){
@@ -280,13 +384,11 @@ function renderInputs(){
 }
 
 function render(){
-  if(state.hp > maxHp()) state.hp = maxHp();
+  state.hp = clamp(state.hp, 0, maxHp());
 
-  document.getElementById("hp").textContent = "HP: " + state.hp + "/" + maxHp();
-  document.getElementById("ki").textContent = "Ki: " + kiCurrent() + "/" + kiMax();
-  document.getElementById("levelText").textContent = "Level: " + state.level;
-  document.getElementById("statsSummary").textContent =
-    "STR " + state.str + " | DEX " + state.dex + " | CON " + state.con + " | INT " + state.intStat + " | WIS " + state.wis + " | CHA " + state.cha;
+  document.getElementById("hp").textContent = state.hp + "/" + maxHp();
+  document.getElementById("ki").textContent = kiCurrent() + "/" + kiMax();
+  document.getElementById("levelText").textContent = state.level;
 
   document.getElementById("derivedStats").innerHTML =
     "Attack Bonus: +" + attackBonus() +
@@ -304,14 +406,16 @@ function render(){
   save();
 }
 
-function formatMod(n){
-  return n >= 0 ? "+" + n : String(n);
-}
+window.saveStats = saveStats;
+window.hpChange = hpChange;
+window.useKi = useKi;
+window.restoreKi = restoreKi;
+window.attack = attack;
+window.flurry = flurry;
 
 render();
 
 });
 </script>
-
 </body>
 </html>
