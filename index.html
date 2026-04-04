@@ -5,6 +5,198 @@
 <title>Indominuz</title>
 <style>
 :root{
+  --bg:#08111f;
+  --bg2:#0f172a;
+  --panel:#111c31;
+  --panel2:#1a2744;
+  --line:rgba(255,255,255,.08);
+  --text:#f8fafc;
+  --muted:#cbd5e1;
+  --blue:#3b82f6;
+  --green:#22c55e;
+  --red:#ef4444;
+  --amber:#f59e0b;
+  --violet:#8b5cf6;
+  --shadow:0 16px 34px rgba(0,0,0,.30);
+  --radius:20px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  padding:14px;
+  font-family:Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(59,130,246,.18), transparent 28%),
+    radial-gradient(circle at top right, rgba(139,92,246,.10), transparent 24%),
+    linear-gradient(180deg,var(--bg),var(--bg2));
+  color:var(--text);
+}
+.app{
+  max-width:1000px;
+  margin:0 auto;
+}
+.card{
+  background:
+    linear-gradient(180deg, rgba(26,39,68,.96), rgba(17,28,49,.96));
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:18px;
+  margin-bottom:14px;
+  box-shadow:var(--shadow);
+}
+.hero{
+  padding:22px;
+  background:
+    radial-gradient(circle at top left, rgba(59,130,246,.15), transparent 36%),
+    linear-gradient(135deg, rgba(59,130,246,.14), rgba(139,92,246,.10)),
+    linear-gradient(180deg, rgba(26,39,68,.98), rgba(17,28,49,.98));
+}
+.hero h1{
+  margin:0 0 6px 0;
+  font-size:2.1rem;
+  letter-spacing:.3px;
+}
+.subtitle{
+  color:var(--muted);
+  font-size:1rem;
+}
+.stats-top{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:12px;
+  margin-top:16px;
+}
+.statbox{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:16px;
+  padding:14px;
+}
+.label{
+  color:var(--muted);
+  font-size:.8rem;
+  margin-bottom:6px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+.value{
+  font-size:1.45rem;
+  font-weight:900;
+}
+button{
+  border:none;
+  border-radius:14px;
+  padding:12px 15px;
+  margin:4px;
+  font-weight:800;
+  color:white;
+  background:#334155;
+  cursor:pointer;
+  box-shadow:var(--shadow);
+  transition:transform .08s ease, filter .18s ease;
+}
+button:hover{filter:brightness(1.06)}
+button:active{transform:scale(.98)}
+.primary{background:linear-gradient(135deg,#2563eb,var(--blue))}
+.success{background:linear-gradient(135deg,#16a34a,var(--green))}
+.danger{background:linear-gradient(135deg,#dc2626,var(--red))}
+.warning{background:linear-gradient(135deg,#d97706,var(--amber))}
+.violet{background:linear-gradient(135deg,#7c3aed,var(--violet))}
+.button-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+input, select{
+  width:100%;
+  padding:13px 14px;
+  border:none;
+  border-radius:14px;
+  background:#334155;
+  color:white;
+  font-size:1rem;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.03);
+}
+input:focus, select:focus{
+  outline:none;
+  box-shadow:0 0 0 3px rgba(59,130,246,.18);
+}
+.grid-2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+.grid-3{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+.section-title{
+  margin:0 0 14px 0;
+  font-size:1.45rem;
+  letter-spacing:.2px;
+}
+.log{
+  display:grid;
+  gap:8px;
+}
+.log div{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:14px;
+  padding:11px 12px;
+}
+.derived{
+  line-height:1.75;
+  color:#e2e8f0;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:14px;
+  padding:12px;
+}
+.stat-label-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  margin-bottom:6px;
+}
+.mod-badge{
+  display:inline-block;
+  min-width:48px;
+  text-align:center;
+  padding:5px 9px;
+  border-radius:999px;
+  background:rgba(255,255,255,.08);
+  color:#e2e8f0;
+  font-size:.85rem;
+  font-weight:900;
+}
+.ability-card{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:16px;
+  padding:14px;
+}
+.ability-name{
+  font-weight:900;
+  font-size:1rem;
+  margin-bottom:5px;
+}
+.ability-desc{
+  color:var(--muted);
+  font-size:.92rem;
+  line-height:1.45;
+  margin-bottom:10px;
+}
+@media (max-width:700px){
+  .stats-top,.grid-2,.grid-3{grid-template-columns:1fr}
+  button{width:100%;margin:0}
+  .button-row{display:grid}
+  .hero h1{font-size:1.8rem}
+}
+</style>
+:root{
   --bg:#0f172a;
   --panel:#14213d;
   --panel2:#1e293b;
@@ -100,68 +292,7 @@ input, select{
 }
 .grid-3{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-}
-.section-title{
-  margin:0 0 12px 0;
-  font-size:1.5rem;
-}
-.log{
-  display:grid;
-  gap:8px;
-}
-.log div{
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.06);
-  border-radius:12px;
-  padding:10px;
-}
-.derived{
-  line-height:1.65;
-  color:#e2e8f0;
-}
-.stat-label-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:8px;
-  margin-bottom:6px;
-}
-.mod-badge{
-  display:inline-block;
-  min-width:44px;
-  text-align:center;
-  padding:4px 8px;
-  border-radius:999px;
-  background:rgba(255,255,255,.08);
-  color:#e2e8f0;
-  font-size:.85rem;
-  font-weight:800;
-}
-.ability-card{
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.06);
-  border-radius:14px;
-  padding:12px;
-}
-.ability-name{
-  font-weight:800;
-  font-size:1rem;
-  margin-bottom:4px;
-}
-.ability-desc{
-  color:var(--muted);
-  font-size:.9rem;
-  line-height:1.4;
-  margin-bottom:10px;
-}
-@media (max-width:700px){
-  .stats-top,.grid-2,.grid-3{grid-template-columns:1fr}
-  button{width:100%;margin:0}
-  .button-row{display:grid}
-}
-</style>
+
 </head>
 <body>
 <div class="app">
