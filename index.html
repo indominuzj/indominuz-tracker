@@ -5,91 +5,312 @@
 <title>Indominuz</title>
 
 <style>
-body{font-family:Arial;background:#0f172a;color:white;padding:10px}
-.card{background:#1e293b;padding:12px;border-radius:12px;margin-bottom:10px}
-button{padding:10px;border:none;border-radius:10px;margin:4px;font-weight:bold;background:#334155;color:white}
+body{
+  font-family:Arial;
+  background:#0f172a;
+  color:white;
+  padding:10px;
+  margin:0;
+}
+.card{
+  background:#1e293b;
+  padding:12px;
+  border-radius:12px;
+  margin-bottom:10px;
+}
+button{
+  padding:10px;
+  border:none;
+  border-radius:10px;
+  margin:4px;
+  font-weight:bold;
+  background:#334155;
+  color:white;
+}
 .success{background:#22c55e}
 .danger{background:#ef4444}
+.warning{background:#f59e0b}
+.primary{background:#3b82f6}
+input{
+  width:100%;
+  padding:10px;
+  margin:6px 0;
+  border:none;
+  border-radius:10px;
+  background:#334155;
+  color:white;
+}
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.small{
+  color:#cbd5e1;
+  font-size:.9rem;
+}
 </style>
 </head>
 
 <body>
 
 <div class="card">
-<h2>Indominuz</h2>
-<div id="hp"></div>
-<div id="ki"></div>
+  <h2>Indominuz</h2>
+  <div id="hp"></div>
+  <div id="ki"></div>
+  <div id="levelText"></div>
+  <div id="statsSummary"></div>
 </div>
 
 <div class="card">
-<button onclick="hpChange(-5)" class="danger">-5 HP</button>
-<button onclick="hpChange(5)" class="success">+5 HP</button>
+  <h3>HP / Ki Controls</h3>
+  <button onclick="hpChange(-5)" class="danger">-5 HP</button>
+  <button onclick="hpChange(5)" class="success">+5 HP</button>
+  <button onclick="useKi()" class="warning">Use Ki</button>
+  <button onclick="restoreKi()" class="success">Restore Ki</button>
 </div>
 
 <div class="card">
-<button onclick="attack()">Attack</button>
-<button onclick="flurry()">Flurry</button>
+  <h3>Combat</h3>
+  <button onclick="attack()" class="primary">Attack</button>
+  <button onclick="flurry()">Flurry</button>
 </div>
 
-<div class="card" id="log"></div>
+<div class="card">
+  <h3>Character Stat Points</h3>
+  <div class="grid">
+    <div>
+      <div class="small">Level</div>
+      <input id="levelInput" type="number" min="1" max="20">
+    </div>
+    <div>
+      <div class="small">Current HP</div>
+      <input id="currentHpInput" type="number" min="0">
+    </div>
+    <div>
+      <div class="small">STR</div>
+      <input id="strInput" type="number" min="1" max="20">
+    </div>
+    <div>
+      <div class="small">DEX</div>
+      <input id="dexInput" type="number" min="1" max="20">
+    </div>
+    <div>
+      <div class="small">CON</div>
+      <input id="conInput" type="number" min="1" max="20">
+    </div>
+    <div>
+      <div class="small">INT</div>
+      <input id="intInput" type="number" min="1" max="20">
+    </div>
+    <div>
+      <div class="small">WIS</div>
+      <input id="wisInput" type="number" min="1" max="20">
+    </div>
+    <div>
+      <div class="small">CHA</div>
+      <input id="chaInput" type="number" min="1" max="20">
+    </div>
+  </div>
+
+  <button onclick="saveStats()" class="success">Save Stats</button>
+
+  <div id="derivedStats" class="small" style="margin-top:8px;"></div>
+</div>
+
+<div class="card">
+  <h3>Log</h3>
+  <div id="log"></div>
+</div>
 
 <script>
-let hp = 26;
-let level = 3;
-let dex = 16;
-let con = 14;
-let ki = 3;
-let logs = [];
+document.addEventListener("DOMContentLoaded", function(){
 
-function mod(x){ return Math.floor((x-10)/2); }
+const STORAGE_KEY = "indominuz_safe_stats_v1";
+
+const defaultState = {
+  hp: 26,
+  level: 3,
+  str: 10,
+  dex: 16,
+  con: 14,
+  intStat: 8,
+  wis: 15,
+  cha: 10,
+  kiSpent: 0,
+  logs: []
+};
+
+function load(){
+  try{
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+    if(!saved) return {...defaultState};
+    return {
+      ...defaultState,
+      ...saved
+    };
+  }catch(e){
+    return {...defaultState};
+  }
+}
+
+let state = load();
+
+function save(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function mod(x){
+  return Math.floor((x - 10) / 2);
+}
+
+function profBonus(){
+  if(state.level >= 17) return 6;
+  if(state.level >= 13) return 5;
+  if(state.level >= 9) return 4;
+  if(state.level >= 5) return 3;
+  return 2;
+}
 
 function maxHp(){
-  return 8 + mod(con) + ((level-1)*(5+mod(con)));
+  return Math.max(1, 8 + mod(state.con) + ((state.level - 1) * (5 + mod(state.con))));
+}
+
+function kiMax(){
+  return state.level >= 2 ? state.level : 0;
+}
+
+function kiCurrent(){
+  return Math.max(0, kiMax() - state.kiSpent);
 }
 
 function attackBonus(){
-  return mod(dex)+2;
+  return mod(state.dex) + profBonus();
+}
+
+function saveDc(){
+  return 8 + profBonus() + mod(state.wis);
+}
+
+function log(text){
+  state.logs.unshift(text);
+  state.logs = state.logs.slice(0, 12);
 }
 
 function hpChange(n){
-  hp += n;
-  if(hp<0) hp=0;
-  if(hp>maxHp()) hp=maxHp();
-  log("HP "+n);
+  state.hp += n;
+  if(state.hp < 0) state.hp = 0;
+  if(state.hp > maxHp()) state.hp = maxHp();
+  log("HP " + (n > 0 ? "+" : "") + n);
+  render();
+}
+
+function useKi(){
+  if(kiCurrent() <= 0){
+    log("No Ki left");
+    render();
+    return;
+  }
+  state.kiSpent++;
+  log("Used 1 Ki");
+  render();
+}
+
+function restoreKi(){
+  if(state.kiSpent > 0){
+    state.kiSpent--;
+    log("Restored 1 Ki");
+  } else {
+    log("Ki already full");
+  }
   render();
 }
 
 function attack(){
-  let roll = Math.floor(Math.random()*20)+1;
+  let roll = Math.floor(Math.random() * 20) + 1;
   let total = roll + attackBonus();
-  log("Attack: "+total);
+  log("Attack roll: " + total + " (" + roll + " + " + attackBonus() + ")");
   render();
 }
 
 function flurry(){
-  if(ki<=0){
-    log("No Ki");
+  if(kiCurrent() <= 0){
+    log("No Ki for Flurry");
     render();
     return;
   }
-  ki--;
-  let dmg = Math.floor(Math.random()*4)+1 + mod(dex);
-  log("Flurry dmg: "+dmg);
+  state.kiSpent++;
+  let dmg1 = Math.floor(Math.random() * 4) + 1 + mod(state.dex);
+  let dmg2 = Math.floor(Math.random() * 4) + 1 + mod(state.dex);
+  log("Flurry: " + dmg1 + " and " + dmg2 + " damage");
   render();
 }
 
-function log(text){
-  logs.unshift(text);
-  logs = logs.slice(0,10);
+function saveStats(){
+  state.level = clamp(Number(document.getElementById("levelInput").value || 3), 1, 20);
+  state.str = clamp(Number(document.getElementById("strInput").value || 10), 1, 20);
+  state.dex = clamp(Number(document.getElementById("dexInput").value || 16), 1, 20);
+  state.con = clamp(Number(document.getElementById("conInput").value || 14), 1, 20);
+  state.intStat = clamp(Number(document.getElementById("intInput").value || 8), 1, 20);
+  state.wis = clamp(Number(document.getElementById("wisInput").value || 15), 1, 20);
+  state.cha = clamp(Number(document.getElementById("chaInput").value || 10), 1, 20);
+  state.hp = clamp(Number(document.getElementById("currentHpInput").value || state.hp), 0, maxHp());
+
+  if(state.kiSpent > kiMax()){
+    state.kiSpent = kiMax();
+  }
+
+  log("Stats updated");
+  render();
+}
+
+function clamp(value, min, max){
+  return Math.max(min, Math.min(max, value));
+}
+
+function renderInputs(){
+  document.getElementById("levelInput").value = state.level;
+  document.getElementById("currentHpInput").value = state.hp;
+  document.getElementById("strInput").value = state.str;
+  document.getElementById("dexInput").value = state.dex;
+  document.getElementById("conInput").value = state.con;
+  document.getElementById("intInput").value = state.intStat;
+  document.getElementById("wisInput").value = state.wis;
+  document.getElementById("chaInput").value = state.cha;
 }
 
 function render(){
-  document.getElementById("hp").textContent = "HP: "+hp+"/"+maxHp();
-  document.getElementById("ki").textContent = "Ki: "+ki;
-  document.getElementById("log").innerHTML = logs.map(x=>"<div>"+x+"</div>").join("");
+  if(state.hp > maxHp()) state.hp = maxHp();
+
+  document.getElementById("hp").textContent = "HP: " + state.hp + "/" + maxHp();
+  document.getElementById("ki").textContent = "Ki: " + kiCurrent() + "/" + kiMax();
+  document.getElementById("levelText").textContent = "Level: " + state.level;
+  document.getElementById("statsSummary").textContent =
+    "STR " + state.str + " | DEX " + state.dex + " | CON " + state.con + " | INT " + state.intStat + " | WIS " + state.wis + " | CHA " + state.cha;
+
+  document.getElementById("derivedStats").innerHTML =
+    "Attack Bonus: +" + attackBonus() +
+    "<br>Save DC: " + saveDc() +
+    "<br>Max HP: " + maxHp() +
+    "<br>Proficiency Bonus: +" + profBonus() +
+    "<br>DEX Mod: " + formatMod(mod(state.dex)) +
+    "<br>WIS Mod: " + formatMod(mod(state.wis)) +
+    "<br>CON Mod: " + formatMod(mod(state.con));
+
+  document.getElementById("log").innerHTML =
+    state.logs.map(x => "<div>" + x + "</div>").join("");
+
+  renderInputs();
+  save();
+}
+
+function formatMod(n){
+  return n >= 0 ? "+" + n : String(n);
 }
 
 render();
+
+});
 </script>
 
 </body>
