@@ -29,7 +29,7 @@ body{
     linear-gradient(180deg,#08111f,var(--bg));
   color:var(--text);
 }
-.app{max-width:950px;margin:0 auto}
+.app{max-width:1000px;margin:0 auto}
 .card{
   background:linear-gradient(180deg,var(--panel),var(--panel2));
   border:1px solid var(--line);
@@ -43,7 +43,7 @@ body{
 .subtitle{color:var(--muted);font-size:.95rem}
 .stats-top{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(5,1fr);
   gap:10px;
   margin-top:14px;
 }
@@ -168,12 +168,12 @@ input, select{
 
   <div class="card hero">
     <h1>🐾 Indominuz</h1>
-    <div class="subtitle">Tabaxi Monk • Clean Safe Build</div>
+    <div class="subtitle">Tabaxi Monk • Way of the Open Hand • Combat Companion</div>
 
     <div class="stats-top">
       <div class="statbox">
         <div class="label">HP</div>
-        <div class="value" id="hp">26/24</div>
+        <div class="value" id="hp">24/24</div>
       </div>
       <div class="statbox">
         <div class="label">Ki</div>
@@ -186,6 +186,10 @@ input, select{
       <div class="statbox">
         <div class="label">Save DC</div>
         <div class="value" id="saveDcTop">12</div>
+      </div>
+      <div class="statbox">
+        <div class="label">Gold</div>
+        <div class="value" id="goldTop">50</div>
       </div>
     </div>
   </div>
@@ -207,7 +211,7 @@ input, select{
     <div class="grid-2">
       <div class="ability-card">
         <div class="ability-name">Martial Arts</div>
-        <div class="ability-desc">Use DEX for monk weapons and unarmed strikes. Bonus action unarmed strike after attacking.</div>
+        <div class="ability-desc">Bonus action unarmed strike after attacking. Uses DEX for monk attacks.</div>
         <button onclick="useMartialArts()" class="primary">Use Martial Arts</button>
       </div>
 
@@ -231,13 +235,13 @@ input, select{
 
       <div class="ability-card">
         <div class="ability-name">Feline Agility</div>
-        <div class="ability-desc">Double your speed for the turn. You can’t use it again until you move 0 feet on one of your turns.</div>
-        <button onclick="felineAgility()" class="success">Use Feline Agility</button>
+        <div class="ability-desc">Double your speed for the turn. Reset it after a turn with 0 movement.</div>
+        <button onclick="felineAgility()" class="success">Toggle Feline Agility</button>
       </div>
 
       <div class="ability-card">
         <div class="ability-name">Open Hand Technique</div>
-        <div class="ability-desc">When Flurry hits, you can knock prone, push 15 ft, or stop reactions. Save DC uses your monk save DC.</div>
+        <div class="ability-desc">On Flurry hits, choose an effect. Uses your monk save DC.</div>
         <div class="button-row">
           <select id="openHandSelect">
             <option value="Knock Prone">Knock Prone</option>
@@ -312,8 +316,39 @@ input, select{
     </div>
 
     <div style="margin-top:12px">
-      <button onclick="saveStats()" class="success">Save Stats</button>
+      <button onclick="saveStats()" id="saveBtn" class="success">Save Changes</button>
+      <div id="saveStatus" style="margin-top:6px;font-size:.85rem;color:#22c55e;"></div>
     </div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Shop</h2>
+
+    <div class="grid-2">
+      <div>
+        <div class="label">Item Name</div>
+        <input id="shopItemName" type="text" placeholder="Healing Potion">
+      </div>
+      <div>
+        <div class="label">Cost (gold)</div>
+        <input id="shopItemCost" type="number" min="0" placeholder="50">
+      </div>
+    </div>
+
+    <div style="margin-top:12px" class="button-row">
+      <button onclick="buyCustomItem()" class="success">Buy Item</button>
+    </div>
+
+    <div style="margin-top:16px" class="grid-3">
+      <button onclick="buyPresetItem('Healing Potion', 50)" class="primary">Healing Potion — 50g</button>
+      <button onclick="buyPresetItem('Rations', 1)" class="primary">Rations — 1g</button>
+      <button onclick="buyPresetItem('Rope', 1)" class="primary">Rope — 1g</button>
+      <button onclick="buyPresetItem('Torch', 1)" class="primary">Torch — 1g</button>
+      <button onclick="buyPresetItem('Dart', 1)" class="primary">Dart — 1g</button>
+      <button onclick="buyPresetItem('Potion of Climbing', 180)" class="primary">Potion of Climbing — 180g</button>
+    </div>
+
+    <div id="shopStatus" style="margin-top:12px" class="derived"></div>
   </div>
 
   <div class="grid-2">
@@ -333,7 +368,7 @@ input, select{
 <script>
 document.addEventListener("DOMContentLoaded", function(){
 
-const STORAGE_KEY = "indominuz_clean_ui_v3";
+const STORAGE_KEY = "indominuz_full_safe_build_v1";
 
 const defaultState = {
   hp: 24,
@@ -344,6 +379,7 @@ const defaultState = {
   intStat: 8,
   wis: 15,
   cha: 10,
+  gold: 50,
   kiSpent: 0,
   logs: [],
   felineUsed: false
@@ -500,6 +536,43 @@ function openHandTechnique(){
   render();
 }
 
+function processPurchase(name, cost){
+  if(cost < 0){
+    document.getElementById("shopStatus").innerHTML = "Cost cannot be negative.";
+    return;
+  }
+
+  if(state.gold < cost){
+    document.getElementById("shopStatus").innerHTML =
+      "Not enough gold for <strong>" + name + "</strong>.";
+    log("Could not afford " + name + " (" + cost + "g)");
+    render();
+    return;
+  }
+
+  state.gold -= cost;
+  log("Bought " + name + " for " + cost + "g");
+  document.getElementById("shopStatus").innerHTML =
+    "Purchased <strong>" + name + "</strong> for " + cost + "g.";
+  render();
+}
+
+function buyPresetItem(name, cost){
+  processPurchase(name, cost);
+}
+
+function buyCustomItem(){
+  const name = document.getElementById("shopItemName").value.trim();
+  const cost = Number(document.getElementById("shopItemCost").value || 0);
+
+  if(!name){
+    document.getElementById("shopStatus").innerHTML = "Enter an item name.";
+    return;
+  }
+
+  processPurchase(name, cost);
+}
+
 function saveStats(){
   state.level = clamp(Number(document.getElementById("levelInput").value || 3), 1, 20);
   state.str = clamp(Number(document.getElementById("strInput").value || 10), 1, 20);
@@ -512,7 +585,18 @@ function saveStats(){
 
   if(state.kiSpent > kiMax()) state.kiSpent = kiMax();
 
-  log("Stats updated");
+  log("Stats saved");
+
+  const btn = document.getElementById("saveBtn");
+  const status = document.getElementById("saveStatus");
+  btn.style.boxShadow = "0 0 15px #22c55e";
+  status.textContent = "Saved ✓";
+
+  setTimeout(() => {
+    btn.style.boxShadow = "";
+    status.textContent = "";
+  }, 1500);
+
   render();
 }
 
@@ -547,6 +631,7 @@ function render(){
   document.getElementById("ki").textContent = kiCurrent() + "/" + kiMax();
   document.getElementById("levelText").textContent = state.level;
   document.getElementById("saveDcTop").textContent = saveDc();
+  document.getElementById("goldTop").textContent = state.gold;
 
   document.getElementById("derivedStats").innerHTML =
     "Attack Bonus: +" + attackBonus() +
@@ -556,7 +641,8 @@ function render(){
     "<br>DEX Mod: " + formatMod(mod(state.dex)) +
     "<br>WIS Mod: " + formatMod(mod(state.wis)) +
     "<br>CON Mod: " + formatMod(mod(state.con)) +
-    "<br>Speed: " + speed() + " ft";
+    "<br>Speed: " + speed() + " ft" +
+    "<br>Gold: " + state.gold;
 
   document.getElementById("log").innerHTML =
     state.logs.map(x => "<div>" + x + "</div>").join("");
@@ -577,6 +663,8 @@ window.patientDefense = patientDefense;
 window.stepOfTheWind = stepOfTheWind;
 window.felineAgility = felineAgility;
 window.openHandTechnique = openHandTechnique;
+window.buyPresetItem = buyPresetItem;
+window.buyCustomItem = buyCustomItem;
 
 render();
 
